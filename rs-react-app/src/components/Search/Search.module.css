@@ -1,4 +1,9 @@
 .search-container input {
-  height: 32px;
-  width: 250px;
+  height: 42px;
+  width: 350px;
+}
+
+.search-container .search-button {
+  height: 42px;
+  padding: 12px 20px;
 }

@@ -17,6 +17,10 @@
   color: azure;
 }
 
+.app-container span {
+  color: azure;
+}
+
 .video-background {
   position: fixed;
   top: 0;

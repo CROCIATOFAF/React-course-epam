@@ -52,6 +52,7 @@ class Search extends Component<SearchProps, SearchState> {
         <button
           onClick={this.handleSearch}
           disabled={!this.state.searchTerm.trim()}
+          className="search-button"
         >
           Search
         </button>
