@@ -1,9 +1,6 @@
-/* Card.module.css */
-
 .card {
-  border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #fffaf0;
   padding: 16px;
   margin: 12px;
   width: 300px;
@@ -27,7 +24,7 @@
   align-items: center;
   justify-content: center;
   background-color: #f0f0f0;
-  color: #888;
+  color: #888888;
   margin-bottom: 12px;
 }
 
@@ -38,7 +35,10 @@
 }
 
 .card p {
+  width: 100%;
   font-size: 0.9rem;
-  color: #666;
+  color: #666666;
   text-align: center;
+  overflow-wrap: break-word;
+  white-space: normal;
 }

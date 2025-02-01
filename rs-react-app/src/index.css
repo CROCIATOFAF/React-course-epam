@@ -21,6 +21,11 @@ a {
 a:hover {
   color: #535bf2;
 }
+@font-face {
+  font-family: 'FiraCode';
+  src: url('./assets/fonts/FiraCode-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+}
 
 body {
   margin: 0;
@@ -28,6 +33,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'FiraCode', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  box-sizing: border-box;
 }
 
 h1 {
