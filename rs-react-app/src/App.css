@@ -5,6 +5,28 @@
   text-align: center;
 }
 
+.app-container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #000000;
+  padding: 20px;
+}
+
+.app-container h1 {
+  color: azure;
+}
+
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
