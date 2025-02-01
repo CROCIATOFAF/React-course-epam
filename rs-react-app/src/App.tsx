@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import Search from './components/Search/Search';
+import Home from './pages/Home';
+
 import './App.css';
 
 class App extends Component {
@@ -14,7 +15,7 @@ class App extends Component {
       <div className="app-container">
         <h1>Discover</h1>
         <span>our intergalactic multimedia collections</span>
-        <Search onSearchSubmit={this.handleSearchSubmit} />
+        <Home />
       </div>
     );
   }

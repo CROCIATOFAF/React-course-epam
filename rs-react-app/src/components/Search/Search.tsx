@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import styles from './Search.module.css';
+import { getSearchTerm, setSearchTerm } from '../../utils/storage';
 
 interface SearchProps {
   onSearchSubmit: (searchTerm: string) => void;
@@ -13,21 +14,23 @@ class Search extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
     this.state = {
-      searchTerm: localStorage.getItem('searchTerm') || '',
+      searchTerm: getSearchTerm(),
     };
   }
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: event.target.value });
+    const value = event.target.value;
+    console.log('[Search] Input changed to:', value);
+    this.setState({ searchTerm: value });
   };
 
-  // trims whitespace
+  // Trim whitespace and trigger the search.
   handleSearch = () => {
     const trimmedTerm = this.state.searchTerm.trim();
-    if (trimmedTerm) {
-      localStorage.setItem('searchTerm', trimmedTerm);
-      this.props.onSearchSubmit(trimmedTerm);
-    }
+    console.log('[Search] Search triggered with term:', trimmedTerm);
+
+    setSearchTerm(trimmedTerm);
+    this.props.onSearchSubmit(trimmedTerm);
   };
 
   handleKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -43,6 +46,7 @@ class Search extends Component<SearchProps, SearchState> {
           type="text"
           value={this.state.searchTerm}
           onChange={this.handleChange}
+          onKeyDown={this.handleKeydown}
           placeholder='Search for ... (e.g. "Orion")'
         />
         <button
