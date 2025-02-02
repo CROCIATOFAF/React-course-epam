@@ -1,50 +1,50 @@
 .fallbackContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 60vh;
-    text-align: center;
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 2px solid #f5c6cb;
-    border-radius: 12px;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 2px solid #f5c6cb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.errorIcon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.retryButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.retryButton:hover {
+  background-color: #c82333;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
   }
-  
-  .errorIcon {
-    width: 70px;
-    height: 70px;
-    margin-bottom: 10px;
-    animation: pulse 1.5s infinite ease-in-out;
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
   }
-  
-  .retryButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
-  
-  .retryButton:hover {
-    background-color: #c82333;
-  }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    50% {
-      transform: scale(1.2);
-      opacity: 0.7;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
+}

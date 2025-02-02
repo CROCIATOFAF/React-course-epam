@@ -19,7 +19,6 @@
   border-radius: 18px;
   margin-bottom: 12px;
   border: 2px solid #20b2aa;
-
 }
 
 .placeholder {
@@ -52,7 +51,7 @@
   white-space: normal;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #20b2aa #e6e6fa; 
+  scrollbar-color: #20b2aa #e6e6fa;
   border: 1px solid #20b2aa;
   border-radius: 7px;
   padding: 12px 4px;

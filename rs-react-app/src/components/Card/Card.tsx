@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Card.module.css';
 import './Card.module.css';
-let d;
 
 interface CardProps {
   title: string;

@@ -3,12 +3,6 @@ import styles from './ErrorBoundary.module.css';
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
-let a;
-let a;
-let a;
-let a;
-let a;
-let a;
 
 interface ErrorBoundaryState {
   hasError: boolean;
