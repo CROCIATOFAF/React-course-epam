@@ -54,6 +54,14 @@ export const fetchNasaImages = async (
     url += `&q=${encodeURIComponent(searchTerm.trim())}`;
   }
 
+  const lowerTerm = searchTerm.trim().toLowerCase();
+  if (lowerTerm === 'simulate404') {
+    throw new ApiError('Forced error for testing (simulate 404)', 404);
+  }
+  if (lowerTerm === 'simulate500') {
+    throw new ApiError('Forced error for testing (simulate 500)', 500);
+  }
+
   try {
     const response = await fetch(url);
 

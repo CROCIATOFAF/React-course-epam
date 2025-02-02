@@ -18,7 +18,13 @@ class App extends Component {
           Your browser does not support the video tag.
         </video>
         <h1>Discover</h1>
-        <span>our intergalactic multimedia collections</span>
+        <div className="app__text-container">
+          <span>our intergalactic multimedia collections</span>
+          <p className="app__text-container-important">
+            Enter: &apos;simulate404&apos; or &apos;simulate500&apos; to see
+            error messages, as NASA API will send back 200 regardless
+          </p>
+        </div>
         <Home />
       </div>
     );

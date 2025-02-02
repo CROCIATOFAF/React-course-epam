@@ -31,6 +31,23 @@
   z-index: -1;
 }
 
+.app__text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app__text-container-important {
+  margin-top: 10px;
+  width: 100%;
+  max-width: 800px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #f0f0f0;
+  background: rgba(32, 178, 170, 0.9);
+  border-radius: 12px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
