@@ -33,5 +33,3 @@ class Card extends Component<CardProps> {
 }
 
 export default Card;
-
-console.log(styles);

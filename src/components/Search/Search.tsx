@@ -20,15 +20,12 @@ class Search extends Component<SearchProps, SearchState> {
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    console.log('[Search] Input changed to:', value);
     this.setState({ searchTerm: value });
   };
 
   // Trim whitespace and trigger the search.
   handleSearch = () => {
     const trimmedTerm = this.state.searchTerm.trim();
-    console.log('[Search] Search triggered with term:', trimmedTerm);
-
     setSearchTerm(trimmedTerm);
     this.props.onSearchSubmit(trimmedTerm);
   };

@@ -54,8 +54,6 @@ export const fetchNasaImages = async (
     url += `&q=${encodeURIComponent(searchTerm.trim())}`;
   }
 
-  console.log('🌍 Fetching from URL:', url);
-
   try {
     const response = await fetch(url);
 
@@ -89,7 +87,6 @@ export const fetchNasaImages = async (
       throw new Error('No results found for the given search term.');
     }
 
-    console.log('[NASA API] Successfully fetched items:', items);
     return items;
   } catch (error: unknown) {
     if (error instanceof TypeError) {

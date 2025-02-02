@@ -39,11 +39,9 @@ class Home extends Component<HomeProps, HomeState> {
   }
 
   fetchData = (searchTerm: string) => {
-    console.log('[Home] Fetching data for:', searchTerm);
     this.setState({ loading: true, error: null });
     fetchNasaImages(searchTerm)
       .then((items) => {
-        console.log('[Home] Fetched items:', items);
         this.setState({ items, loading: false });
       })
       .catch((error: unknown) => {
@@ -62,7 +60,6 @@ class Home extends Component<HomeProps, HomeState> {
   };
 
   handleSearchSubmit = (searchTerm: string) => {
-    console.log('[Home] Received search term:', searchTerm);
     setSearchTerm(searchTerm);
     this.setState({ searchTerm });
     this.fetchData(searchTerm);
