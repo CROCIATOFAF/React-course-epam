@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-
+import styles from './ErrorBoundary.module.css';
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
@@ -23,9 +23,25 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
+  handleReset = () => {
+    this.setState({ hasError: false });
+  };
+
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong. Please try again later.</h1>;
+      return (
+        <div className={styles.fallbackContainer}>
+          <img className={styles.errorIcon} src="/error.svg" alt="error icon" />
+          <h1>Oops! Something went wrong.</h1>
+          <p>
+            Sun is very active today, or Saturn is in Scorpio... Yet Again!!!
+            Please try again.
+          </p>
+          <button onClick={this.handleReset} className={styles.retryButton}>
+            Retry, Please
+          </button>
+        </div>
+      );
     }
     return this.props.children;
   }

@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import styles from './Home.module.css';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
 import { fetchNasaImages, CardData } from '../components/services/nasaApi';
@@ -11,6 +12,7 @@ interface HomeState {
   loading: boolean;
   error: string | null;
   searchTerm: string;
+  forceError: boolean;
 }
 
 class Home extends Component<HomeProps, HomeState> {
@@ -22,6 +24,7 @@ class Home extends Component<HomeProps, HomeState> {
       loading: false,
       error: null,
       searchTerm: savedTerm,
+      forceError: false,
     };
   }
 
@@ -51,18 +54,30 @@ class Home extends Component<HomeProps, HomeState> {
     this.fetchData(searchTerm);
   };
 
+  handleThrowError = () => {
+    this.setState({ forceError: true });
+  };
+
   render() {
-    const { items, loading, error } = this.state;
+    const { items, loading, error, forceError } = this.state;
+    if (forceError) {
+      throw new Error('This is a forced render error!');
+    }
     return (
-      <div>
+      <div className={styles.homeContainer}>
         <Search onSearchSubmit={this.handleSearchSubmit} />
+
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
-          <div style={{ color: 'red' }}>Error: {error}</div>
+          <div className={styles.errorMessage}>Error: {error}</div>
         ) : (
           <CardList items={items} />
         )}
+
+        <button onClick={this.handleThrowError} className={styles.errorButton}>
+          Throw Error
+        </button>
       </div>
     );
   }
