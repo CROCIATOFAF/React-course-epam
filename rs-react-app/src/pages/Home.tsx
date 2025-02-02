@@ -6,6 +6,10 @@ import { fetchNasaImages, CardData } from '../components/services/nasaApi';
 import { getSearchTerm, setSearchTerm } from '../utils/storage';
 import Spinner from '../components/Spinner/Spinner';
 
+interface ApiError extends Error {
+  code?: number;
+}
+
 type HomeProps = Record<string, never>;
 
 interface HomeState {
@@ -42,9 +46,18 @@ class Home extends Component<HomeProps, HomeState> {
         console.log('[Home] Fetched items:', items);
         this.setState({ items, loading: false });
       })
-      .catch((error: Error) => {
+      .catch((error: unknown) => {
         console.error('[Home] Error fetching data:', error);
-        this.setState({ error: error.message, loading: false });
+        let errorMessage = '';
+        if (error instanceof Error) {
+          const apiError = error as ApiError;
+          errorMessage = apiError.code
+            ? `${apiError.message} (Code: ${apiError.code})`
+            : apiError.message;
+        } else {
+          errorMessage = 'An unexpected error occurred.';
+        }
+        this.setState({ error: errorMessage, loading: false });
       });
   };
 
@@ -68,9 +81,6 @@ class Home extends Component<HomeProps, HomeState> {
       <div className={styles.homeContainer}>
         <Search onSearchSubmit={this.handleSearchSubmit} />
         {loading && <Spinner />}
-
-        {error && <div className={styles.errorMessage}>{error}</div>}
-
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
@@ -78,7 +88,6 @@ class Home extends Component<HomeProps, HomeState> {
         ) : (
           <CardList items={items} />
         )}
-
         <button onClick={this.handleThrowError} className={styles.errorButton}>
           Throw Error
         </button>
