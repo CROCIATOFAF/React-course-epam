@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './Card.module.css';
 import './Card.module.css';
+let d;
 
 interface CardProps {
   title: string;
@@ -25,6 +26,7 @@ class Card extends Component<CardProps> {
           </div>
         )}
         <h3>{title}</h3>
+        <h4>Description :</h4>
         <p>{description}</p>
       </div>
     );
@@ -32,3 +34,5 @@ class Card extends Component<CardProps> {
 }
 
 export default Card;
+
+console.log(styles);
