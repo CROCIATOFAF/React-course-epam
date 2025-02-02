@@ -4,6 +4,7 @@ import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
 import { fetchNasaImages, CardData } from '../components/services/nasaApi';
 import { getSearchTerm, setSearchTerm } from '../utils/storage';
+import Spinner from '../components/Spinner/Spinner';
 
 type HomeProps = Record<string, never>;
 
@@ -66,6 +67,9 @@ class Home extends Component<HomeProps, HomeState> {
     return (
       <div className={styles.homeContainer}>
         <Search onSearchSubmit={this.handleSearchSubmit} />
+        {loading && <Spinner />}
+
+        {error && <div className={styles.errorMessage}>{error}</div>}
 
         {loading ? (
           <div>Loading...</div>

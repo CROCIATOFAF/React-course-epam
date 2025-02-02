@@ -1,8 +1,8 @@
 .card {
   border-radius: 8px;
   background-color: #fffaf0;
-  padding: 16px;
-  margin: 12px;
+  padding: 12px;
+  margin: 8px 12px;
   width: 300px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -37,6 +37,10 @@
   margin: 8px 0;
   font-size: 1.2rem;
   text-align: center;
+}
+
+.card h4 {
+  margin-bottom: 15px;
 }
 
 .card p {
