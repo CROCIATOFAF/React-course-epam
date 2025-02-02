@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format:fix": "prettier --write .",
-    "prepare": "husky && husky install"
+    "prepare": "HUSKY_GIT_DIR=../.git husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
