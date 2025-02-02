@@ -5,6 +5,7 @@ interface ErrorBoundaryProps {
 }
 let a;
 let a;
+let a;
 
 interface ErrorBoundaryState {
   hasError: boolean;
