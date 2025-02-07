@@ -9,8 +9,11 @@ import Spinner from '../components/Spinner/Spinner';
 interface ApiError extends Error {
   code?: number;
 }
+interface HomeProps {
+  onSearchSubmit: (term: string) => void;
+}
 
-const Home: React.FC = () => {
+const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
   const [items, setItems] = useState<CardData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +52,7 @@ const Home: React.FC = () => {
   const handleSearchSubmit = (term: string) => {
     setSearchTerm(term); // Save to local storage
     setLocalSearchTerm(term);
+    onSearchSubmit(term);
     fetchData(term);
   };
 
