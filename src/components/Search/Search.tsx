@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { useState } from 'react';
 import styles from './Search.module.css';
 import { getSearchTerm, setSearchTerm } from '../../utils/storage';
 
@@ -6,56 +6,44 @@ interface SearchProps {
   onSearchSubmit: (searchTerm: string) => void;
 }
 
-interface SearchState {
-  searchTerm: string;
-}
+const Search: React.FC<SearchProps> = ({ onSearchSubmit }) => {
+  const [searchTerm, setLocalSearchTerm] = useState<string>(getSearchTerm());
 
-class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.state = {
-      searchTerm: getSearchTerm(),
-    };
-  }
-
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    this.setState({ searchTerm: value });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearchTerm(event.target.value);
   };
 
   // Trim whitespace and trigger the search.
-  handleSearch = () => {
-    const trimmedTerm = this.state.searchTerm.trim();
-    setSearchTerm(trimmedTerm);
-    this.props.onSearchSubmit(trimmedTerm);
+  const handleSearch = () => {
+    const trimnedTerm = searchTerm.trim();
+    setSearchTerm(trimnedTerm);
+    onSearchSubmit(trimnedTerm);
   };
 
-  handleKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.handleSearch();
+      handleSearch();
     }
   };
 
-  render() {
-    return (
-      <div className={styles['search-container']}>
-        <input
-          type="text"
-          value={this.state.searchTerm}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeydown}
-          placeholder='Search for ... (e.g. "Orion")'
-        />
-        <button
-          onClick={this.handleSearch}
-          disabled={!this.state.searchTerm.trim()}
-          className={styles['search-button']}
-        >
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles['search-container']}>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleChange}
+        onKeyDown={handleKeydown}
+        placeholder='Search for ... (e.g. "Orion")'
+      />
+      <button
+        onClick={handleSearch}
+        disabled={!searchTerm.trim()}
+        className={styles['search-button']}
+      >
+        Search
+      </button>
+    </div>
+  );
+};
 
 export default Search;
