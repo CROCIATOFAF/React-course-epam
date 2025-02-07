@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from './Home.module.css';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
@@ -10,87 +10,72 @@ interface ApiError extends Error {
   code?: number;
 }
 
-type HomeProps = Record<string, never>;
+const Home: React.FC = () => {
+  const [items, setItems] = useState<CardData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setLocalSearchTerm] = useState<string>(getSearchTerm());
+  const [forceError, setForceError] = useState<boolean>(false);
 
-interface HomeState {
-  items: CardData[];
-  loading: boolean;
-  error: string | null;
-  searchTerm: string;
-  forceError: boolean;
-}
-
-class Home extends Component<HomeProps, HomeState> {
-  constructor(props: HomeProps) {
-    super(props);
-    const savedTerm = getSearchTerm();
-    this.state = {
-      items: [],
-      loading: false,
-      error: null,
-      searchTerm: savedTerm,
-      forceError: false,
-    };
-  }
-
-  componentDidMount() {
-    const term = this.state.searchTerm.trim();
-    this.fetchData(term);
-  }
-
-  fetchData = (searchTerm: string) => {
-    this.setState({ loading: true, error: null });
-    fetchNasaImages(searchTerm)
-      .then((items) => {
-        this.setState({ items, loading: false });
+  const fetchData = useCallback((term: string) => {
+    setLoading(true);
+    setError(null);
+    fetchNasaImages(term)
+      .then((fetchedItems) => {
+        setItems(fetchedItems);
+        setLoading(false);
       })
-      .catch((error: unknown) => {
-        console.error('[Home] Error fetching data:', error);
+      .catch((err: unknown) => {
+        console.error('[Home] Error fetching data:', err);
         let errorMessage = '';
-        if (error instanceof Error) {
-          const apiError = error as ApiError;
+        if (err instanceof Error) {
+          const apiError = err as ApiError;
           errorMessage = apiError.code
             ? `${apiError.message} (Code: ${apiError.code})`
             : apiError.message;
         } else {
           errorMessage = 'An unexpected error occurred.';
         }
-        this.setState({ error: errorMessage, loading: false });
+        setError(errorMessage);
+        setLoading(false);
       });
+  }, []);
+
+  useEffect(() => {
+    const term = searchTerm.trim();
+    fetchData(term);
+  }, [fetchData, searchTerm]);
+
+  const handleSearchSubmit = (term: string) => {
+    setSearchTerm(term); // Save to local storage
+    setLocalSearchTerm(term);
+    fetchData(term);
   };
 
-  handleSearchSubmit = (searchTerm: string) => {
-    setSearchTerm(searchTerm);
-    this.setState({ searchTerm });
-    this.fetchData(searchTerm);
+  const handleThrowError = () => {
+    setForceError(true);
   };
 
-  handleThrowError = () => {
-    this.setState({ forceError: true });
-  };
-
-  render() {
-    const { items, loading, error, forceError } = this.state;
-    if (forceError) {
-      throw new Error('This is a forced render error!');
-    }
-    return (
-      <div className={styles.homeContainer}>
-        <Search onSearchSubmit={this.handleSearchSubmit} />
-        {loading && <Spinner />}
-        {loading ? (
-          <div>Loading...</div>
-        ) : error ? (
-          <div className={styles.errorMessage}>Error: {error}</div>
-        ) : (
-          <CardList items={items} />
-        )}
-        <button onClick={this.handleThrowError} className={styles.errorButton}>
-          Throw Error
-        </button>
-      </div>
-    );
+  if (forceError) {
+    throw new Error('This is a forced render error!');
   }
-}
+
+  return (
+    <div className={styles.homeContainer}>
+      <Search onSearchSubmit={handleSearchSubmit} />
+      {loading && <Spinner />}
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div className={styles.errorMessage}>Error: {error}</div>
+      ) : (
+        <CardList items={items} />
+      )}
+      <button onClick={handleThrowError} className={styles.errorButton}>
+        Throw Error
+      </button>
+    </div>
+  );
+};
 
 export default Home;

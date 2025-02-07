@@ -15,9 +15,9 @@ const Search: React.FC<SearchProps> = ({ onSearchSubmit }) => {
 
   // Trim whitespace and trigger the search.
   const handleSearch = () => {
-    const trimnedTerm = searchTerm.trim();
-    setSearchTerm(trimnedTerm);
-    onSearchSubmit(trimnedTerm);
+    const trimmedTerm = searchTerm.trim();
+    setSearchTerm(trimmedTerm);
+    onSearchSubmit(trimmedTerm);
   };
 
   const handleKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
