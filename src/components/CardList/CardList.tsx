@@ -6,9 +6,10 @@ import { CardData } from '../services/nasaApi';
 
 interface CardListProps {
   items: CardData[];
+  onCardClick: (id: string, e: React.MouseEvent) => void;
 }
 
-const CardList: React.FC<CardListProps> = ({ items }) => {
+const CardList: React.FC<CardListProps> = ({ items, onCardClick }) => {
   if (!items || items.length === 0) {
     return <div>No results found.</div>;
   }
@@ -17,9 +18,11 @@ const CardList: React.FC<CardListProps> = ({ items }) => {
       {items.map((item) => (
         <Card
           key={item.id}
+          id={item.id}
           title={item.title}
           description={item.description}
           image={item.image}
+          onClick={onCardClick}
         />
       ))}
     </div>

@@ -9,7 +9,18 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format:fix": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "jest --coverage",
+    "prepush": "npm test"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.tsx",
+      "!**/node_modules/**",
+      "!**/*.test.tsx",
+      "!src/__tests__/setup.ts",
+      "!src/App.tsx"
+    ]
   },
   "lint-staged": {
     "*.{ts,tsx}": [

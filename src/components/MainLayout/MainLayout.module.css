@@ -1,0 +1,14 @@
+.mainLayout {
+  display: flex;
+  height: 100vh;
+}
+.leftSection {
+  flex: 1;
+  overflow-y: auto;
+  cursor: pointer;
+}
+.rightSection {
+  width: 300px;
+  border-left: 1px solid #ddd;
+  overflow-y: auto;
+}

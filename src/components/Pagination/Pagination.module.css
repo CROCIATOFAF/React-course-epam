@@ -5,14 +5,14 @@
   gap: 5px;
 }
 
-button {
+.pagination button {
   padding: 5px 10px;
   border: none;
   background-color: #ddd;
   cursor: pointer;
 }
 
-button:disabled {
+.pagination button:disabled {
   opacity: 0.6;
   cursor: default;
 }
