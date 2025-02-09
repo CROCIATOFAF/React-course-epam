@@ -3,6 +3,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 
+import type { Mock } from 'vitest';
+
 vi.mock('../components/services/nasaApi', () => ({
   fetchNasaImages: vi.fn(),
 }));
@@ -30,7 +32,7 @@ describe('Home Component', () => {
       description: `Description ${i + 1}`,
       image: `http://example.com/image${i + 1}.jpg`,
     }));
-    (fetchNasaImages as vi.Mock).mockResolvedValue(fakeCards);
+    (fetchNasaImages as Mock).mockResolvedValue(fakeCards);
 
     render(
       <MemoryRouter initialEntries={['/']}>
@@ -53,7 +55,7 @@ describe('Home Component', () => {
   });
 
   it('displays error message when fetch fails', async () => {
-    (fetchNasaImages as vi.Mock).mockRejectedValue(new Error('API error'));
+    (fetchNasaImages as Mock).mockRejectedValue(new Error('API error'));
 
     render(
       <MemoryRouter initialEntries={['/']}>
@@ -72,7 +74,8 @@ describe('Home Component', () => {
   });
 
   it('calls onSearchSubmit with trimmed value and updates local storage when search button is clicked', async () => {
-    (fetchNasaImages as vi.Mock).mockResolvedValue([]);
+    (fetchNasaImages as Mock).mockResolvedValue([]);
+
     render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
@@ -99,7 +102,7 @@ describe('Home Component', () => {
   });
 
   it('throws an error when "Throw Error" button is clicked', () => {
-    (fetchNasaImages as vi.Mock).mockResolvedValue([]);
+    (fetchNasaImages as Mock).mockResolvedValue([]);
     expect(() =>
       render(
         <MemoryRouter initialEntries={['/']}>

@@ -1,8 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
+import { useState } from 'react';
 
-function ProblemChild() {
+function ProblemChild(): never {
   throw new Error('Test error');
 }
 

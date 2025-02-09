@@ -58,7 +58,6 @@ describe('Card Component', () => {
       fireEvent.click(cardElement);
     }
     expect(onClickMock).toHaveBeenCalledTimes(1);
-    // Instead of asserting the synthetic event itself, check the native event.
     expect(onClickMock.mock.calls[0][1].nativeEvent).toBeInstanceOf(MouseEvent);
   });
 });
