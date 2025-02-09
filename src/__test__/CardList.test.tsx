@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CardList from '../components/CardList/CardList';
@@ -40,6 +39,9 @@ describe('CardList Component', () => {
       fireEvent.click(cardElement);
     }
     expect(onCardClickMock).toHaveBeenCalledTimes(1);
-    expect(onCardClickMock).toHaveBeenCalledWith('1', expect.any(Object));
+    expect(onCardClickMock.mock.calls[0][0]).toBe('1');
+    expect(onCardClickMock.mock.calls[0][1].nativeEvent).toBeInstanceOf(
+      MouseEvent
+    );
   });
 });

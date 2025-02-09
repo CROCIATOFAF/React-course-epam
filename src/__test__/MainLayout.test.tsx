@@ -14,7 +14,6 @@ vi.mock('../pages/Home', () => ({
   default: () => <div data-testid="home">Mocked Home</div>,
 }));
 
-import React from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';

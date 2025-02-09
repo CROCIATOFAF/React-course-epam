@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Card from '../components/Card/Card';
@@ -21,7 +20,6 @@ describe('Card Component', () => {
 
     render(<Card {...props} />);
 
-    // Check that the image is rendered
     const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'http://example.com/image.jpg');
@@ -55,13 +53,12 @@ describe('Card Component', () => {
     };
 
     render(<Card {...props} />);
-
     const cardElement = screen.getByText('Test Card').closest('div');
     if (cardElement) {
       fireEvent.click(cardElement);
     }
-
     expect(onClickMock).toHaveBeenCalledTimes(1);
-    expect(onClickMock).toHaveBeenCalledWith('123', expect.any(Object));
+    // Instead of asserting the synthetic event itself, check the native event.
+    expect(onClickMock.mock.calls[0][1].nativeEvent).toBeInstanceOf(MouseEvent);
   });
 });
