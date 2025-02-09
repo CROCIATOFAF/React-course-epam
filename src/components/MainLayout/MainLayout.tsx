@@ -23,7 +23,7 @@ const MainLayout: React.FC = () => {
         <Home onSearchSubmit={() => {}} />
       </div>
       {detailsOpen && (
-        <div className={styles.rightSection}>
+        <div data-testid="outlet" className={styles.rightSection}>
           <Outlet />
         </div>
       )}

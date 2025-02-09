@@ -1,8 +1,7 @@
-// src/components/DetailCard/DetailCard.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
-import styles from './DetailCard.module.css'; // This file defines .detailCard and .close-button
+import styles from './DetailCard.module.css';
 
 interface CardDetail {
   id: string;
