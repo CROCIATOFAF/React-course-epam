@@ -6,14 +6,26 @@
 }
 
 .theme-light {
-  background-color: red;
-  color: orange;
+  --card-bg: #fffaf0;
+  --card-border: #20b2aa;
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --card-text: #000;
+  --caption-background: rgba(32, 178, 170, 0.9);
+  --header-text: #000000;
+  --caption-text: #000000;
 }
 
 .theme-dark {
-  background-color: blue;
-  color: green;
+  --card-bg: rgba(43, 77, 76 , 0.9);
+  --card-border: #888888;
+  --card-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+  --card-text: #fff;
+  --caption-background: rgba(43, 77, 76 , 0.9);
+  --header-text: #fffaf0;
+  --header-text: #fffaf0;
+  --caption-text: #fffaf0;
 }
+
 
 .app-container {
   position: relative;
@@ -23,21 +35,13 @@
 }
 
 .app-container h1 {
-  color: #fffaf0;
+  color: var(--header-text);
+  font-size: 55px;
 }
 
 .app-container span {
-  color: #fffaf0;
-}
-
-.video-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -1;
+  color: var(--caption-text);
+  font-size: 24px;
 }
 
 .app__text-container {
@@ -52,8 +56,8 @@
   max-width: 800px;
   font-size: 18px;
   font-weight: 700;
-  color: #f0f0f0;
-  background: rgba(32, 178, 170, 0.9);
+  color: var(--caption-text);
+  background: var(--caption-background);
   border-radius: 12px;
 }
 

@@ -7,6 +7,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Flyout from './components/FLyout/Flyout';
 import ThemeSwitcher from './components/ThemeSwitcher/ThemeSwitcher';
 import Spinner from './components/Spinner/Spinner';
+import VideoBackground from './components/VideoBackground/VideoBackground';
 import './App.css';
 
 const DetailCard = lazy(() => import('./components/DetailCard/DetailCard'));
@@ -24,10 +25,7 @@ const App: React.FC = () => {
                 path="/"
                 element={
                   <div className="app-container">
-                    <video className="video-background" autoPlay muted loop>
-                      <source src="earth.mp4" type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                    <VideoBackground />
 
                     <div className="app__text-container">
                       <h1>Discover</h1>
