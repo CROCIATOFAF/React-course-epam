@@ -17,6 +17,7 @@
   --search-button: #20b2aa;
   --search-input-color: #fffaf0;
   --search-input-text-color: #1c1f26;
+  --close-button-color: #20b2aa;
 }
 
 .theme-dark {
@@ -32,6 +33,7 @@
   --search-button: rgba(43, 77, 76 , 0.9);
   --search-input-color: #1c1f26;
   --search-input-text-color: #fffaf0;
+  --close-button-color: rgba(43, 77, 76 , 0.9);
 }
 
 

@@ -12,10 +12,12 @@ const ThemeSwitcher: React.FC = () => {
   return (
     <div className={styles.themeSwitcher}>
       <label htmlFor="theme-select">Select Theme: </label>
-      <select id="theme-select" value={theme} onChange={handleChange}>
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-      </select>
+      <div className={styles.selectWrapper}>
+        <select id="theme-select" value={theme} onChange={handleChange}>
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+        </select>
+      </div>
     </div>
   );
 };
