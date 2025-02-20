@@ -8,7 +8,7 @@
 .pagination button {
   padding: 5px 10px;
   border: none;
-  background-color: #ddd;
+  background-color: var(--pagination-button);
   cursor: pointer;
 }
 

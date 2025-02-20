@@ -13,16 +13,16 @@
   width: 350px;
   font-size: 18px;
   padding: 4px 12px;
-  color: #fffaf0;
+  color: var(--search-input-text-color);
   border-radius: 12px;
-  background-color: #1c1f26;
+  background-color: var(--search-input-color);
 }
 
 .search-container .search-button {
   padding: 12px 20px;
   border-radius: 8px;
   font-size: 18px;
-  background-color: #20b2aa;
+  background-color: var(--search-button);
   color: #fffaf0;
   width: 120px;
 }
