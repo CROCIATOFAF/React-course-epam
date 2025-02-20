@@ -13,7 +13,6 @@ const Search: React.FC<SearchProps> = ({ onSearchSubmit }) => {
     setLocalSearchTerm(event.target.value);
   };
 
-  // Trim whitespace and trigger the search.
   const handleSearch = () => {
     const trimmedTerm = searchTerm.trim();
     setSearchTerm(trimmedTerm);

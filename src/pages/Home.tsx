@@ -7,6 +7,9 @@ import { getSearchTerm, setSearchTerm } from '../utils/storage';
 import Spinner from '../components/Spinner/Spinner';
 import Pagination from '../components/Pagination/Pagination';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, selectItem, unselectItem } from '../store';
+import { selectSelectedItems } from '../store';
 
 interface ApiError extends Error {
   code?: number;
@@ -23,6 +26,12 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
   const [forceError, setForceError] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const selectedItems = useSelector((state: RootState) =>
+    selectSelectedItems(state)
+  );
+  const selectedItemIds = selectedItems.map((item) => item.id);
 
   const fetchData = useCallback((term: string) => {
     setLoading(true);
@@ -54,10 +63,9 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
   }, [fetchData, searchTerm]);
 
   const handleSearchSubmit = (term: string) => {
-    setSearchTerm(term); // Save to local storage
+    setSearchTerm(term);
     setLocalSearchTerm(term);
     onSearchSubmit(term);
-    // Reset pagination to page 1 on new search
     setSearchParams({ page: '1' });
     fetchData(term);
   };
@@ -66,7 +74,6 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
     setForceError(true);
   };
 
-  // Pagination logic
   const itemsPerPage = 10;
   const currentPage = Number(searchParams.get('page')) || 1;
   const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -85,6 +92,16 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
     navigate(`/details/${id}?frontpage=${page}`);
   };
 
+  const handleSelectChange = (id: string, selected: boolean) => {
+    const item = items.find((item) => item.id === id);
+    if (!item) return;
+    if (selected) {
+      dispatch(selectItem(item));
+    } else {
+      dispatch(unselectItem(id));
+    }
+  };
+
   if (forceError) {
     throw new Error('This is a forced render error!');
   }
@@ -99,7 +116,12 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
         <div className={styles.errorMessage}>Error: {error}</div>
       ) : items.length > 0 ? (
         <>
-          <CardList items={currentItems} onCardClick={handleCardClick} />
+          <CardList
+            items={currentItems}
+            onCardClick={handleCardClick}
+            selectedItemIds={selectedItemIds}
+            onSelectChange={handleSelectChange}
+          />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

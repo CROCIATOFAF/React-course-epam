@@ -1,0 +1,19 @@
+.themeSwitcher {
+  z-index: 10;
+  color: #fffaf0;
+  position: relative;
+  font-size: 24px;
+}
+
+.themeSwitcher select {
+  padding: 8px 12px;
+  font-size: 24px;
+  background: #1c1f26;
+  color: #fffaf0;
+  border-radius: 12px;
+}
+
+.themeSwitcher select > option {
+  background: red;
+  color: red;
+}

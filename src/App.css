@@ -5,6 +5,16 @@
   text-align: center;
 }
 
+.theme-light {
+  background-color: red;
+  color: orange;
+}
+
+.theme-dark {
+  background-color: blue;
+  color: green;
+}
+
 .app-container {
   position: relative;
   z-index: 1;

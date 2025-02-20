@@ -66,7 +66,6 @@ export const fetchNasaImages = async (
     const response = await fetch(url);
 
     if (!response.ok) {
-      // Throw an ApiError with a code property
       throw new ApiError(
         `API Error: ${response.status} ${response.statusText}`,
         response.status
