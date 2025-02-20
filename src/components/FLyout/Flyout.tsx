@@ -38,7 +38,12 @@ const Flyout: React.FC = () => {
         {selectedItems.length} item{selectedItems.length > 1 ? 's' : ''}{' '}
         selected
       </p>
-      <button onClick={() => dispatch(unselectAll())}>Unselect all</button>
+      <button
+        className={styles.flyoutButtonSelect}
+        onClick={() => dispatch(unselectAll())}
+      >
+        Unselect all
+      </button>
       <button onClick={handleDownload}>Download</button>
     </div>
   );
