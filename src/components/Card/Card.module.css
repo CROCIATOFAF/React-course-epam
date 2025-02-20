@@ -60,8 +60,36 @@
   padding: 12px 4px;
 }
 
-.card input {
-  /* width: 30px; */
-  /* height: 30px; */
-  margin-bottom: 15px;
+.card input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 10px;
+  background: #fff;
+  border: 2px solid var(--card-border);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+
+.card input[type="checkbox"]:checked {
+  background: var(--card-border);
+}
+
+.card input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid var(--card-text);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.card input[type="checkbox"] {
+  flex-shrink: 0;
 }
