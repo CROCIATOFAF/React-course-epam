@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ThemeSwitcher from '../components/ThemeSwitcher/ThemeSwitcher';
 import { ThemeContext, Theme } from '../context/ThemeContext';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 import Home from '../pages/Home';
 import { Provider } from 'react-redux';
 import { store } from '../store';
@@ -26,7 +26,7 @@ vi.mock('../components/services/api', async () => {
 });
 import { useFetchNasaImagesQuery } from '../components/services/api';
 const mockedUseFetchNasaImagesQuery =
-  useFetchNasaImagesQuery as unknown as vi.Mock;
+  useFetchNasaImagesQuery as unknown as Mock;
 
 vi.mock('../utils/storage', () => ({
   getSearchTerm: () => '',

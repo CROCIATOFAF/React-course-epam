@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import CardList from '../components/CardList/CardList';
 import { CardData } from '../components/services/nasaApi';

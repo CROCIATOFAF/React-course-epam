@@ -1,10 +1,9 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import DetailCard from '../components/DetailCard/DetailCard';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from '../store';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 
 vi.mock('../components/services/api', async () => {
   const actual = await vi.importActual('../components/services/api');
@@ -14,7 +13,7 @@ vi.mock('../components/services/api', async () => {
   };
 });
 import { useFetchDetailQuery } from '../components/services/api';
-const mockedUseFetchDetailQuery = useFetchDetailQuery as unknown as vi.Mock;
+const mockedUseFetchDetailQuery = useFetchDetailQuery as unknown as Mock;
 
 const navigateMock = vi.fn();
 vi.mock('react-router-dom', async () => {

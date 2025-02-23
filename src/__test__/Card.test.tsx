@@ -4,9 +4,11 @@ import Card from '../components/Card/Card';
 
 describe('Card Component', () => {
   const onClickMock = vi.fn();
+  const onSelectChangeMock = vi.fn();
 
   beforeEach(() => {
     onClickMock.mockClear();
+    onSelectChangeMock.mockClear();
   });
 
   it('renders image when provided, along with title and description', () => {
@@ -16,6 +18,8 @@ describe('Card Component', () => {
       description: 'This is a test card description',
       image: 'http://example.com/image.jpg',
       onClick: onClickMock,
+      isSelected: false,
+      onSelectChange: onSelectChangeMock,
     };
 
     render(<Card {...props} />);
@@ -37,6 +41,8 @@ describe('Card Component', () => {
       title: 'Test Card',
       description: 'This is a test card description',
       onClick: onClickMock,
+      isSelected: false,
+      onSelectChange: onSelectChangeMock,
     };
 
     render(<Card {...props} />);
@@ -50,6 +56,8 @@ describe('Card Component', () => {
       description: 'This is a test card description',
       image: 'http://example.com/image.jpg',
       onClick: onClickMock,
+      isSelected: false,
+      onSelectChange: onSelectChangeMock,
     };
 
     render(<Card {...props} />);

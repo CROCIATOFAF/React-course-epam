@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import VideoBackground from '../components/VideoBackground/VideoBackground';
 import { ThemeContext, Theme } from '../context/ThemeContext';
