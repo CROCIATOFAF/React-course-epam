@@ -1,0 +1,19 @@
+.flyout {
+  position: sticky;
+  bottom: 20px;
+  padding: 10px;
+  border-radius: 12px;
+  z-index: 10;
+  background: var(--card-border);
+  width: 300px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.flyout p {
+  margin-bottom: 5px;
+}
+
+.flyoutButtonSelect {
+  margin-right: 10px;
+}

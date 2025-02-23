@@ -1,0 +1,50 @@
+.themeSwitcher {
+  z-index: 10;
+  color: #fffaf0;
+  position: relative;
+  font-size: 24px;
+  background-color: var(--caption-background);
+  width: 200px;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.selectWrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.selectWrapper select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  font-size: 24px;
+  background-color: var(--search-input-color);
+  color: var(--card-text);
+  border: 1px solid var(--caption-border, #ccc);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.selectWrapper::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--search-button);
+  pointer-events: none;
+}
+
+.themeSwitcher option {
+  background-color: #1c1f26;
+  color: #fffaf0;
+  padding: 8px;
+}

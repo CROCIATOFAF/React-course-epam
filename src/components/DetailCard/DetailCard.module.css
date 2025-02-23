@@ -1,0 +1,20 @@
+.detailCard {
+  padding: 10px 4px;
+  color: #fffaf0;
+  width: 100%;
+  max-width: 300px;
+}
+.close-button {
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  background-color: var(--close-button-color);
+}
+
+.detailCard img {
+  width: 100%;
+  max-width: 350px;
+}
+
+.detailCard p {
+  font-size: 15px;
+}
