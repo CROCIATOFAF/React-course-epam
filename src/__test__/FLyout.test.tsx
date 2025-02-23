@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Flyout from '../components/FLyout/Flyout';
 import { selectedItemsReducer, unselectAll } from '../store';
@@ -8,16 +8,17 @@ import type { RootState } from '../store';
 if (!URL.createObjectURL) {
   URL.createObjectURL = () => 'blob:url';
 }
-
 if (!URL.revokeObjectURL) {
   URL.revokeObjectURL = () => {};
 }
 
+const rootReducer = combineReducers({
+  selectedItems: selectedItemsReducer,
+});
+
 const renderWithStore = (preloadedState: Partial<RootState>) => {
   const store = configureStore({
-    reducer: {
-      selectedItems: selectedItemsReducer,
-    },
+    reducer: rootReducer,
     preloadedState,
   });
   return {
@@ -77,7 +78,7 @@ describe('Flyout Component', () => {
       },
     };
     const store = configureStore({
-      reducer: { selectedItems: selectedItemsReducer },
+      reducer: rootReducer,
       preloadedState,
     });
     const dispatchSpy = vi.spyOn(store, 'dispatch');

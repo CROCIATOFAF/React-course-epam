@@ -1,12 +1,16 @@
 import React from 'react';
 import styles from './Card.module.css';
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
   id: string;
   title: string;
   description: string;
   image?: string;
-  onClick: (id: string, e: React.MouseEvent) => void;
+  onClick: (
+    id: string,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
   isSelected: boolean;
   onSelectChange: (id: string, selected: boolean) => void;
 }
@@ -21,7 +25,7 @@ const Card: React.FC<CardProps> = ({
   onSelectChange,
   ...rest
 }) => {
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick(id, e);
   };
 
