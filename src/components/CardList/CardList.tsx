@@ -23,6 +23,7 @@ const CardList: React.FC<CardListProps> = ({
     <div className={styles.cardList}>
       {items.map((item) => (
         <Card
+          data-testid="card"
           key={item.id}
           id={item.id}
           title={item.title}

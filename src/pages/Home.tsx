@@ -1,79 +1,33 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import styles from './Home.module.css';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
-import { fetchNasaImages, CardData } from '../components/services/nasaApi';
-import { getSearchTerm, setSearchTerm } from '../utils/storage';
 import Spinner from '../components/Spinner/Spinner';
 import Pagination from '../components/Pagination/Pagination';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, selectItem, unselectItem } from '../store';
 import { selectSelectedItems } from '../store';
+import { getSearchTerm, setSearchTerm } from '../utils/storage';
+import { useFetchNasaImagesQuery } from '../components/services/api';
+import { CardData } from '../components/services/nasaApi';
 
-interface ApiError extends Error {
-  code?: number;
-}
 interface HomeProps {
   onSearchSubmit: (term: string) => void;
 }
 
 const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
-  const [items, setItems] = useState<CardData[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setLocalSearchTerm] = useState<string>(getSearchTerm());
   const [forceError, setForceError] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const selectedItems = useSelector((state: RootState) =>
     selectSelectedItems(state)
   );
   const selectedItemIds = selectedItems.map((item) => item.id);
-
-  const fetchData = useCallback((term: string) => {
-    setLoading(true);
-    setError(null);
-    fetchNasaImages(term)
-      .then((fetchedItems) => {
-        setItems(fetchedItems);
-        setLoading(false);
-      })
-      .catch((err: unknown) => {
-        console.error('[Home] Error fetching data:', err);
-        let errorMessage = '';
-        if (err instanceof Error) {
-          const apiError = err as ApiError;
-          errorMessage = apiError.code
-            ? `${apiError.message} (Code: ${apiError.code})`
-            : apiError.message;
-        } else {
-          errorMessage = 'An unexpected error occurred.';
-        }
-        setError(errorMessage);
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    const term = searchTerm.trim();
-    fetchData(term);
-  }, [fetchData, searchTerm]);
-
-  const handleSearchSubmit = (term: string) => {
-    setSearchTerm(term);
-    setLocalSearchTerm(term);
-    onSearchSubmit(term);
-    setSearchParams({ page: '1' });
-    fetchData(term);
-  };
-
-  const handleThrowError = () => {
-    setForceError(true);
-  };
-
+  const { data, error, isLoading } = useFetchNasaImagesQuery(searchTerm);
+  const items: CardData[] = data || [];
   const itemsPerPage = 10;
   const currentPage = Number(searchParams.get('page')) || 1;
   const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -81,6 +35,17 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  const handleSearchSubmit = (term: string) => {
+    setSearchTerm(term);
+    setLocalSearchTerm(term);
+    onSearchSubmit(term);
+    setSearchParams({ page: '1' });
+  };
+
+  const handleThrowError = () => {
+    setForceError(true);
+  };
 
   const handlePageChange = (page: number) => {
     setSearchParams({ page: page.toString() });
@@ -109,11 +74,15 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
   return (
     <div className={styles.homeContainer}>
       <Search onSearchSubmit={handleSearchSubmit} />
-      {loading && <Spinner />}
-      {loading ? (
+
+      {isLoading && <Spinner />}
+
+      {isLoading ? (
         <div>Loading...</div>
       ) : error ? (
-        <div className={styles.errorMessage}>Error: {error}</div>
+        <div className={styles.errorMessage}>
+          Error: {error instanceof Error ? error.message : 'An error occurred'}
+        </div>
       ) : items.length > 0 ? (
         <>
           <CardList
@@ -131,7 +100,12 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
       ) : (
         <div>No results found.</div>
       )}
-      <button onClick={handleThrowError} className={styles.errorButton}>
+
+      <button
+        data-testid="throw-error-button"
+        onClick={handleThrowError}
+        className={styles.errorButton}
+      >
         Throw Error
       </button>
     </div>

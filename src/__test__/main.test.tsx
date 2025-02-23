@@ -11,8 +11,8 @@ describe('Index Entry Point', () => {
   });
 
   afterEach(() => {
-    document.body.removeChild(container);
     cleanup();
+    document.body.removeChild(container);
   });
 
   it('renders the App without crashing', async () => {

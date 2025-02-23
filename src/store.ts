@@ -43,9 +43,11 @@ const selectedItemsSlice = createSlice({
 export const { selectItem, unselectItem, unselectAll } =
   selectedItemsSlice.actions;
 
+export const selectedItemsReducer = selectedItemsSlice.reducer;
+
 export const store = configureStore({
   reducer: {
-    selectedItems: selectedItemsSlice.reducer,
+    selectedItems: selectedItemsReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
