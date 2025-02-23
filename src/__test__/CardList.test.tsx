@@ -73,15 +73,11 @@ describe('CardList Component', () => {
         selectedItemIds={selectedItemIds}
       />
     );
-
     const secondCard = screen.getAllByTestId('card')[1];
     expect(secondCard).toBeInTheDocument();
-
     const checkbox = within(secondCard).getByRole('checkbox');
     expect(checkbox).toBeInTheDocument();
-
     fireEvent.click(checkbox);
-
     expect(onSelectChange).toHaveBeenCalledTimes(1);
     expect(onSelectChange).toHaveBeenCalledWith('2', true);
   });
