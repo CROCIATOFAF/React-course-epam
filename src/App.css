@@ -21,21 +21,20 @@
 }
 
 .theme-dark {
-  --card-bg: rgba(43, 77, 76 , 0.9);
+  --card-bg: rgba(43, 77, 76, 0.9);
   --card-border: #888888;
   --card-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
   --card-text: #fff;
-  --caption-background: rgba(43, 77, 76 , 0.9);
+  --caption-background: rgba(43, 77, 76, 0.9);
   --header-text: #fffaf0;
   --header-text: #fffaf0;
   --caption-text: #fffaf0;
   --pagination-button: #20b2aa;
-  --search-button: rgba(43, 77, 76 , 0.9);
+  --search-button: rgba(43, 77, 76, 0.9);
   --search-input-color: #1c1f26;
   --search-input-text-color: #fffaf0;
-  --close-button-color: rgba(43, 77, 76 , 0.9);
+  --close-button-color: rgba(43, 77, 76, 0.9);
 }
-
 
 .app-container {
   position: relative;

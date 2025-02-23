@@ -60,7 +60,7 @@
   padding: 12px 4px;
 }
 
-.card input[type="checkbox"] {
+.card input[type='checkbox'] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -74,12 +74,12 @@
   position: relative;
 }
 
-.card input[type="checkbox"]:checked {
+.card input[type='checkbox']:checked {
   background: var(--card-border);
 }
 
-.card input[type="checkbox"]:checked::after {
-  content: "";
+.card input[type='checkbox']:checked::after {
+  content: '';
   position: absolute;
   top: 0px;
   left: 6px;
@@ -90,6 +90,6 @@
   transform: rotate(45deg);
 }
 
-.card input[type="checkbox"] {
+.card input[type='checkbox'] {
   flex-shrink: 0;
 }
