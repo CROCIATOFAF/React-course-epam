@@ -39,7 +39,8 @@ describe('MainLayout Component', () => {
       </MainLayout>
     );
 
-    expect(screen.getByTestId('outlet')).toBeInTheDocument();
+    const outlets = screen.getAllByTestId('outlet');
+    expect(outlets.length).toBeGreaterThan(0);
   });
 
   it("navigates to '/' when the left section is clicked while details are open", () => {

@@ -15,7 +15,7 @@ describe('VideoBackground Component', () => {
   it('renders the dark video when theme is dark', () => {
     renderWithTheme('dark');
 
-    const videoElement = screen.getByRole('video');
+    const videoElement = screen.getByTestId('video-background');
     expect(videoElement).toBeInTheDocument();
 
     const sourceElement = videoElement.querySelector('source');
@@ -27,7 +27,7 @@ describe('VideoBackground Component', () => {
   it('renders the light video when theme is light', () => {
     renderWithTheme('light');
 
-    const videoElement = screen.getByRole('video');
+    const videoElement = screen.getByTestId('video-background');
     expect(videoElement).toBeInTheDocument();
 
     const sourceElement = videoElement.querySelector('source');
@@ -38,11 +38,13 @@ describe('VideoBackground Component', () => {
   it('video element has autoplay, muted, and loop properties set to true', () => {
     renderWithTheme('dark');
 
-    const videoElement = screen.getByRole('video') as HTMLVideoElement;
+    const videoElement = screen.getByTestId(
+      'video-background'
+    ) as HTMLVideoElement;
     expect(videoElement).toBeInTheDocument();
 
     expect(videoElement).toHaveAttribute('autoplay');
-    expect(videoElement).toHaveAttribute('muted');
     expect(videoElement).toHaveAttribute('loop');
+    expect(videoElement.muted).toBe(true);
   });
 });

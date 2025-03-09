@@ -7,7 +7,14 @@ const VideoBackground: React.FC = () => {
   const videoSource = theme === 'dark' ? '/earth.mp4' : '/morning.mp4';
 
   return (
-    <video key={theme} className={styles.videoBackground} autoPlay muted loop>
+    <video
+      key={theme}
+      className={styles.videoBackground}
+      autoPlay
+      muted
+      loop
+      data-testid="video-background"
+    >
       <source src={videoSource} type="video/mp4" />
       Your browser does not support the video tag.
     </video>

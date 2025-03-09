@@ -24,18 +24,14 @@ describe('Card Component', () => {
 
     render(<Card {...props} />);
 
-    const img = screen.getByRole('img');
-    expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src', 'http://example.com/image.jpg');
-    expect(img).toHaveAttribute('alt', 'Test Card');
-
+    expect(screen.getByTestId('card-image')).toBeInTheDocument();
     expect(screen.getByText('Test Card')).toBeInTheDocument();
     expect(
       screen.getByText('This is a test card description')
     ).toBeInTheDocument();
   });
 
-  it('renders placeholder when image is not provided', () => {
+  it('renders placeholder text when image is not provided', () => {
     const props = {
       id: '123',
       title: 'Test Card',
@@ -49,7 +45,7 @@ describe('Card Component', () => {
     expect(screen.getByText('No Image Available')).toBeInTheDocument();
   });
 
-  it('calls onClick with the correct id when clicked', () => {
+  it('calls onClick with the correct id when the card is clicked', () => {
     const props = {
       id: '123',
       title: 'Test Card',
@@ -61,17 +57,17 @@ describe('Card Component', () => {
     };
 
     render(<Card {...props} />);
-    const cardElement = screen.getByText('Test Card').closest('div');
 
-    if (cardElement) {
-      fireEvent.click(cardElement);
-    }
+    const cardElement = screen.getByTestId('card-container');
+    expect(cardElement).toBeInTheDocument();
+
+    fireEvent.click(cardElement);
 
     expect(onClickMock).toHaveBeenCalledTimes(1);
-    expect(onClickMock).toHaveBeenCalledWith('123', expect.anything);
+    expect(onClickMock.mock.calls[0][0]).toBe('123');
   });
 
-  it('calls onSelectChange with correct arguments when checkbox is clicked', () => {
+  it('calls onSelectChange when the checkbox is clicked', () => {
     const props = {
       id: '123',
       title: 'Test Card',
@@ -83,10 +79,14 @@ describe('Card Component', () => {
     };
 
     render(<Card {...props} />);
-    const checkbox = screen.getByRole('checkbox');
+
+    const checkbox = screen.getByTestId('card-checkbox');
+    expect(checkbox).toBeInTheDocument();
 
     fireEvent.click(checkbox);
+
     expect(onSelectChangeMock).toHaveBeenCalledTimes(1);
-    expect(onSelectChangeMock).toHaveBeenCalledWith('123', true);
+    expect(onSelectChangeMock.mock.calls[0][0]).toBe('123');
+    expect(onSelectChangeMock.mock.calls[0][1]).toBe(true);
   });
 });

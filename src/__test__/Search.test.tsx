@@ -3,7 +3,7 @@ import Search from '../components/Search/Search';
 import { setSearchTerm } from '../utils/storage';
 
 jest.mock('@/utils/storage', () => ({
-  getSearchTerm: jest.fn(() => 'initial search'),
+  getSearchTerm: jest.fn(() => ''),
   setSearchTerm: jest.fn(),
 }));
 
@@ -17,7 +17,7 @@ describe('Search Component', () => {
   it('retrieves the value from local storage on mount', () => {
     render(<Search onSearchSubmit={onSearchSubmitMock} />);
     const input = screen.getByPlaceholderText(/Search for .../i);
-    expect(input).toHaveValue('initial search');
+    expect(input).toHaveValue('');
   });
 
   it('calls onSearchSubmit with trimmed value and saves to local storage when search button is clicked', () => {

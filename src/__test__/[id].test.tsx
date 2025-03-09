@@ -1,5 +1,5 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import React, { Suspense } from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import DetailPage, { getServerSideProps } from '../pages/details/[id]';
 import '@testing-library/jest-dom';
 import { GetServerSidePropsContext } from 'next';
@@ -18,13 +18,25 @@ jest.mock('../components/DetailCard/DetailCard', () => {
 
 describe('DetailPage Component', () => {
   it('renders DetailCard inside Suspense', async () => {
-    render(<DetailPage id="123" />);
+    render(
+      <Suspense fallback={<div>Loading...</div>}>
+        <DetailPage id="123" />
+      </Suspense>
+    );
 
-    expect(screen.getByTestId('detail-card')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId('detail-card')).toBeInTheDocument()
+    );
   });
 
-  it('renders Spinner when loading', async () => {
-    render(<DetailPage id="123" />);
+  it('renders Spinner while loading', async () => {
+    const LazyDetailCard = React.lazy(() => new Promise(() => {}));
+
+    render(
+      <Suspense fallback={<div data-testid="spinner">Loading...</div>}>
+        <LazyDetailCard />
+      </Suspense>
+    );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });

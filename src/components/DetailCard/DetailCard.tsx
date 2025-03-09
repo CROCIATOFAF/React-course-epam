@@ -4,6 +4,8 @@ import Spinner from '../Spinner/Spinner';
 import styles from './DetailCard.module.css';
 import { useFetchDetailQuery } from '../services/api';
 
+console.log('useFetchDetailQuery:', useFetchDetailQuery);
+
 interface CardDetail {
   id: string;
   title: string;
@@ -20,7 +22,14 @@ const DetailCard: React.FC<DetailCardProps> = ({ id: propId, onClose }) => {
   const router = useRouter();
   const id =
     propId || (typeof router.query.id === 'string' ? router.query.id : '');
-  const { data, error, isLoading } = useFetchDetailQuery(id, { skip: !id });
+
+  console.log('DetailCard ID:', id);
+  const { data, error, isLoading } = useFetchDetailQuery(id);
+  console.log('API Response:', data);
+  console.log('DetailCard ID:', id);
+  console.log('API Response:', data);
+  console.log('Error:', error);
+  console.log('Is Loading:', isLoading);
 
   const handleClose = () => {
     if (onClose) {

@@ -7,6 +7,8 @@ import {
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { api } from './components/services/api';
 
+console.log(api);
+
 export interface Item {
   id: string;
   title: string;
