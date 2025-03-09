@@ -54,7 +54,9 @@ describe('MainLayout Component', () => {
     const leftSection = screen.getByRole('heading', {
       name: /Home/i,
     }).parentElement;
-    fireEvent.click(leftSection!);
+    if (leftSection) {
+      fireEvent.click(leftSection);
+    }
 
     expect(pushMock).toHaveBeenCalledWith('/?frontpage=2');
   });

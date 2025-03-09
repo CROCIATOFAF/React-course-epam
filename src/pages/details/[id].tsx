@@ -11,7 +11,7 @@ interface DetailPageProps {
 const DetailPage: React.FC<DetailPageProps> = ({ id }) => {
   return (
     <Suspense fallback={<Spinner />}>
-      <DetailCard />
+      <DetailCard id={id} />
     </Suspense>
   );
 };

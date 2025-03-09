@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import DetailPage, { getServerSideProps } from '../pages/details/[id]';
 import '@testing-library/jest-dom';
+import { GetServerSidePropsContext } from 'next';
+
 jest.mock('../components/Spinner/Spinner', () => {
   return function SpinnerMock() {
     return <div data-testid="spinner">Loading...</div>;
@@ -30,7 +32,9 @@ describe('DetailPage Component', () => {
 
 describe('getServerSideProps', () => {
   it('returns correct props', async () => {
-    const context = { params: { id: '123' } } as any;
+    const context = {
+      params: { id: '123' },
+    } as unknown as GetServerSidePropsContext;
 
     const response = await getServerSideProps(context);
 

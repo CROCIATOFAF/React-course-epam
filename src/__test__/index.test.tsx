@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Home from '../pages';
 import { Provider } from 'react-redux';
 import { store } from '../store';
