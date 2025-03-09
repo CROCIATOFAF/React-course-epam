@@ -3,27 +3,20 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DetailCard from '../components/DetailCard/DetailCard';
 import { useFetchDetailQuery } from '../components/services/api';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
+
+const mockRouterPush = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(() => ({ push: mockRouterPush })),
+  useSearchParams: jest.fn(() => new URLSearchParams()),
+}));
 
 jest.mock('../components/services/api', () => ({
   useFetchDetailQuery: jest.fn(),
 }));
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(),
-}));
-
 describe('DetailCard Component', () => {
-  const mockRouter = {
-    query: {},
-    push: jest.fn(),
-  };
-
   beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue(mockRouter);
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -85,7 +78,6 @@ describe('DetailCard Component', () => {
     });
 
     render(<DetailCard id="test-id" />);
-
     expect(screen.getByText('Test Title')).toBeInTheDocument();
     expect(screen.getByText('Test Description')).toBeInTheDocument();
     expect(screen.getByAltText('Test Title')).toHaveAttribute(
@@ -96,7 +88,6 @@ describe('DetailCard Component', () => {
 
   test('calls onClose when the close button is clicked', () => {
     const onCloseMock = jest.fn();
-
     const mockData = {
       collection: {
         items: [
@@ -121,15 +112,15 @@ describe('DetailCard Component', () => {
     });
 
     render(<DetailCard id="test-id" onClose={onCloseMock} />);
-
-    const closeButton = screen.getByText(/close/i);
+    const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
-
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 
-  test('navigates to frontpage when closed and onClose is not provided', () => {
-    mockRouter.query = { frontpage: 'home' };
+  test('navigates to frontpage when closed and onClose is not provided (with frontpage param)', () => {
+    (useSearchParams as jest.Mock).mockReturnValue(
+      new URLSearchParams('frontpage=home')
+    );
 
     const mockData = {
       collection: {
@@ -155,15 +146,13 @@ describe('DetailCard Component', () => {
     });
 
     render(<DetailCard id="test-id" />);
-
-    const closeButton = screen.getByText(/close/i);
+    const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
-
-    expect(mockRouter.push).toHaveBeenCalledWith('/?frontpage=home');
+    expect(mockRouterPush).toHaveBeenCalledWith('/?frontpage=home');
   });
 
   test('navigates to home when closed and no frontpage query param', () => {
-    mockRouter.query = {};
+    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams());
 
     const mockData = {
       collection: {
@@ -189,10 +178,8 @@ describe('DetailCard Component', () => {
     });
 
     render(<DetailCard id="test-id" />);
-
-    const closeButton = screen.getByText(/close/i);
+    const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
-
-    expect(mockRouter.push).toHaveBeenCalledWith('/');
+    expect(mockRouterPush).toHaveBeenCalledWith('/');
   });
 });

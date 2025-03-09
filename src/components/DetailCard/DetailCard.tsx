@@ -1,10 +1,10 @@
+'use client';
+
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Spinner from '../Spinner/Spinner';
 import styles from './DetailCard.module.css';
 import { useFetchDetailQuery } from '../services/api';
-
-console.log('useFetchDetailQuery:', useFetchDetailQuery);
 
 interface CardDetail {
   id: string;
@@ -20,13 +20,12 @@ interface DetailCardProps {
 
 const DetailCard: React.FC<DetailCardProps> = ({ id: propId, onClose }) => {
   const router = useRouter();
-  const id =
-    propId || (typeof router.query.id === 'string' ? router.query.id : '');
+  const searchParams = useSearchParams();
+
+  const id = propId || searchParams.get('id') || '';
 
   console.log('DetailCard ID:', id);
   const { data, error, isLoading } = useFetchDetailQuery(id);
-  console.log('API Response:', data);
-  console.log('DetailCard ID:', id);
   console.log('API Response:', data);
   console.log('Error:', error);
   console.log('Is Loading:', isLoading);
@@ -35,13 +34,12 @@ const DetailCard: React.FC<DetailCardProps> = ({ id: propId, onClose }) => {
     if (onClose) {
       onClose();
     } else {
-      const frontpage = router.query.frontpage;
+      const frontpage = searchParams.get('frontpage');
       router.push(frontpage ? `/?frontpage=${frontpage}` : '/');
     }
   };
 
   if (isLoading) return <Spinner />;
-
   if (
     error ||
     !data ||

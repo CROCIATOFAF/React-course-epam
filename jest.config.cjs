@@ -24,6 +24,7 @@ const customJestConfig = {
     '/src/context/',
     '/src/components/services/',
     '/src/hooks/',
+    '/src/app/',
   ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
