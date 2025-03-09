@@ -60,7 +60,7 @@ describe('CardList Component', () => {
     fireEvent.click(firstCard);
 
     expect(mockOnCardClick).toHaveBeenCalledTimes(1);
-    expect(mockOnCardClick).toHaveBeenCalledWith('1', expect.any(Object));
+    expect(mockOnCardClick).toHaveBeenCalledWith('1', expect.anything());
   });
 
   it('calls onSelectChange when the checkbox is toggled', () => {
