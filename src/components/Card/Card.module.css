@@ -1,0 +1,95 @@
+.card {
+  border-radius: 8px;
+  background-color: var(--card-bg);
+  padding: 12px;
+  margin: 8px 12px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 500px;
+  border: 5px solid var(--card-border);
+  color: var(--card-text);
+}
+
+.image {
+  width: 100%;
+  min-height: 300px;
+  height: 300px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+  border: 2px solid var(--card-border);
+}
+
+.placeholder {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  color: #888888;
+  margin-bottom: 12px;
+}
+
+.card h3 {
+  margin: 8px 0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.card h4 {
+  margin-bottom: 15px;
+}
+
+.card p {
+  width: 100%;
+  font-size: 0.9rem;
+  color: #666666;
+  color: var(--card-text);
+  text-align: center;
+  overflow-wrap: break-word;
+  white-space: normal;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #20b2aa #e6e6fa;
+  border: 1px solid #20b2aa;
+  border-radius: 7px;
+  padding: 12px 4px;
+}
+
+.card input[type='checkbox'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 10px;
+  background: #fff;
+  border: 2px solid var(--card-border);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+
+.card input[type='checkbox']:checked {
+  background: var(--card-border);
+}
+
+.card input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid var(--card-text);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.card input[type='checkbox'] {
+  flex-shrink: 0;
+}

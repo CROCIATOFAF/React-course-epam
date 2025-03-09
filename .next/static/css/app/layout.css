@@ -1,0 +1,384 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./src/components/ErrorBoundary/ErrorBoundary.module.css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************/
+.ErrorBoundary_fallbackContainer__5K0Ia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 2px solid #f5c6cb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.ErrorBoundary_errorIcon__sO8mH {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+  animation: ErrorBoundary_pulse__LmI3p 1.5s infinite ease-in-out;
+}
+
+.ErrorBoundary_retryButton__JkTZV {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.ErrorBoundary_retryButton__JkTZV:hover {
+  background-color: #c82333;
+}
+
+@keyframes ErrorBoundary_pulse__LmI3p {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./src/components/ThemeSwitcher/ThemeSwitcher.module.css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************/
+.ThemeSwitcher_themeSwitcher__G9Nw1 {
+  z-index: 10;
+  color: #fffaf0;
+  position: relative;
+  font-size: 24px;
+  background-color: var(--caption-background);
+  width: 200px;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.ThemeSwitcher_selectWrapper__q9M6a {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.ThemeSwitcher_selectWrapper__q9M6a select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  font-size: 24px;
+  background-color: var(--search-input-color);
+  color: var(--card-text);
+  border: 1px solid var(--caption-border, #ccc);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.ThemeSwitcher_selectWrapper__q9M6a::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--search-button);
+  pointer-events: none;
+}
+
+.ThemeSwitcher_themeSwitcher__G9Nw1 option {
+  background-color: #1c1f26;
+  color: #fffaf0;
+  padding: 8px;
+}
+
+/*!***********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./src/components/FLyout/Flyout.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************/
+.Flyout_flyout__I9aso {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 20px;
+  padding: 10px;
+  border-radius: 12px;
+  z-index: 10;
+  background: var(--card-border);
+  width: 300px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.Flyout_flyout__I9aso p {
+  margin-bottom: 5px;
+}
+
+.Flyout_flyoutButtonSelect__2zrbR {
+  margin-right: 10px;
+}
+
+/*!********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./src/styles/globals.css ***!
+  \********************************************************************************************************************************************************************************************************************************************************************/
+#__next {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.theme-light {
+  --card-bg: #fffaf0;
+  --card-border: #20b2aa;
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --card-text: #000;
+  --caption-background: rgba(32, 178, 170, 0.9);
+  --header-text: #000000;
+  --caption-text: #000000;
+  --pagination-button: #dddddd;
+  --search-button: #20b2aa;
+  --search-input-color: #fffaf0;
+  --search-input-text-color: #1c1f26;
+  --close-button-color: #20b2aa;
+}
+
+.theme-dark {
+  --card-bg: rgba(43, 77, 76, 0.9);
+  --card-border: #888888;
+  --card-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+  --card-text: #fff;
+  --caption-background: rgba(43, 77, 76, 0.9);
+  --header-text: #fffaf0;
+  --header-text: #fffaf0;
+  --caption-text: #fffaf0;
+  --pagination-button: #20b2aa;
+  --search-button: rgba(43, 77, 76, 0.9);
+  --search-input-color: #1c1f26;
+  --search-input-text-color: #fffaf0;
+  --close-button-color: rgba(43, 77, 76, 0.9);
+}
+
+.app-container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #000000;
+}
+
+.app-container h1 {
+  color: var(--header-text);
+  font-size: 55px;
+}
+
+.app-container span {
+  color: var(--caption-text);
+  font-size: 24px;
+}
+
+.app__text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app__text-container-important {
+  margin-top: 10px;
+  width: 100%;
+  max-width: 800px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--caption-text);
+  background: var(--caption-background);
+  border-radius: 12px;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.homeContainer {
+  padding: 20px;
+  text-align: center;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.errorButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.errorButton:hover {
+  background-color: #c82333;
+}
+
+.errorMessage {
+  color: #ff4c4c;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::-webkit-scrollbar {
+  width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+@font-face {
+  font-family: 'FiraCode';
+  src: url('/fonts/FiraCode-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'FiraCode', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 3.2em;
+  margin: 0;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
