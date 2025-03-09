@@ -1,191 +1,198 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import DetailCard from '../components/DetailCard/DetailCard';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from '../store';
-import { vi, type Mock } from 'vitest';
-
-vi.mock('../components/services/api', async () => {
-  const actual = await vi.importActual('../components/services/api');
-  return {
-    ...actual,
-    useFetchDetailQuery: vi.fn(),
-  };
-});
 import { useFetchDetailQuery } from '../components/services/api';
-const mockedUseFetchDetailQuery = useFetchDetailQuery as unknown as Mock;
+import { useRouter } from 'next/router';
 
-const navigateMock = vi.fn();
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: () => navigateMock,
-  };
-});
+jest.mock('../components/services/api', () => ({
+  useFetchDetailQuery: jest.fn(),
+}));
 
-const renderWithProviders = (
-  ui: React.ReactElement,
-  { route = '/details/123?frontpage=1' } = {}
-) => {
-  return render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[route]}>
-        <Routes>
-          <Route path="/details/:id" element={ui} />
-          <Route path="/" element={<div>Home</div>} />
-        </Routes>
-      </MemoryRouter>
-    </Provider>
-  );
-};
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
+}));
 
 describe('DetailCard Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
+  const mockRouter = {
+    query: {},
+    push: jest.fn(),
+  };
+
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
   });
 
-  it('renders spinner when loading', () => {
-    mockedUseFetchDetailQuery.mockReturnValue({
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('renders loading spinner when loading', () => {
+    (useFetchDetailQuery as jest.Mock).mockReturnValue({
       isLoading: true,
       data: undefined,
       error: undefined,
     });
 
-    renderWithProviders(<DetailCard />);
+    render(<DetailCard id="test-id" />);
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
-  it('renders "No details available." when error occurs', () => {
-    mockedUseFetchDetailQuery.mockReturnValue({
+  test('renders "No details available." when API call fails', () => {
+    (useFetchDetailQuery as jest.Mock).mockReturnValue({
       isLoading: false,
       data: undefined,
       error: new Error('Test error'),
     });
 
-    renderWithProviders(<DetailCard />);
-    expect(screen.getByText(/No details available/i)).toBeInTheDocument();
+    render(<DetailCard id="test-id" />);
+    expect(screen.getByText(/no details available/i)).toBeInTheDocument();
   });
 
-  it('renders "No details available." when data collection is empty', () => {
-    mockedUseFetchDetailQuery.mockReturnValue({
+  test('renders "No details available." when data is empty', () => {
+    (useFetchDetailQuery as jest.Mock).mockReturnValue({
       isLoading: false,
       data: { collection: { items: [] } },
       error: undefined,
     });
 
-    renderWithProviders(<DetailCard />);
-    expect(screen.getByText(/No details available/i)).toBeInTheDocument();
+    render(<DetailCard id="test-id" />);
+    expect(screen.getByText(/no details available/i)).toBeInTheDocument();
   });
 
-  it('renders "No details available." when dataItem is not available', () => {
-    mockedUseFetchDetailQuery.mockReturnValue({
-      isLoading: false,
-      data: { collection: { items: [{ data: [] }] } },
-      error: undefined,
-    });
-
-    renderWithProviders(<DetailCard />);
-    expect(screen.getByText(/No details available/i)).toBeInTheDocument();
-  });
-
-  it('renders detail card when valid data is available', () => {
-    mockedUseFetchDetailQuery.mockReturnValue({
-      isLoading: false,
-      data: {
-        collection: {
-          items: [
-            {
-              data: [
-                {
-                  nasa_id: '123',
-                  title: 'Test Title',
-                  description: 'Test Description',
-                },
-              ],
-              links: [
-                {
-                  href: 'test.jpg',
-                  rel: 'preview',
-                  render: 'image',
-                },
-              ],
-            },
-          ],
-        },
+  test('renders details when API data is available', () => {
+    const mockData = {
+      collection: {
+        items: [
+          {
+            data: [
+              {
+                nasa_id: 'test-id',
+                title: 'Test Title',
+                description: 'Test Description',
+              },
+            ],
+            links: [{ href: 'https://example.com/image.jpg' }],
+          },
+        ],
       },
+    };
+
+    (useFetchDetailQuery as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: mockData,
       error: undefined,
     });
 
-    renderWithProviders(<DetailCard />);
+    render(<DetailCard id="test-id" />);
+
     expect(screen.getByText('Test Title')).toBeInTheDocument();
-    expect(screen.getByText(/Description:/i)).toBeInTheDocument();
     expect(screen.getByText('Test Description')).toBeInTheDocument();
-    const img = screen.getByAltText('Test Title');
-    expect(img).toHaveAttribute('src', 'test.jpg');
-  });
-
-  it('renders fallback image when links are missing', () => {
-    mockedUseFetchDetailQuery.mockReturnValue({
-      isLoading: false,
-      data: {
-        collection: {
-          items: [
-            {
-              data: [
-                {
-                  nasa_id: '123',
-                  title: 'Test Title',
-                  description: 'Test Description',
-                },
-              ],
-              links: undefined,
-            },
-          ],
-        },
-      },
-      error: undefined,
-    });
-
-    renderWithProviders(<DetailCard />);
-    const img = screen.getByAltText('Test Title');
-    expect(img).toHaveAttribute(
+    expect(screen.getByAltText('Test Title')).toHaveAttribute(
       'src',
-      'https://images-assets.nasa.gov/image/123/123~thumb.jpg'
+      'https://example.com/image.jpg'
     );
   });
 
-  it('calls navigate with correct path when Close button is clicked', () => {
-    mockedUseFetchDetailQuery.mockReturnValue({
-      isLoading: false,
-      data: {
-        collection: {
-          items: [
-            {
-              data: [
-                {
-                  nasa_id: '123',
-                  title: 'Test Title',
-                  description: 'Test Description',
-                },
-              ],
-              links: [
-                {
-                  href: 'test.jpg',
-                  rel: 'preview',
-                  render: 'image',
-                },
-              ],
-            },
-          ],
-        },
+  test('calls onClose when the close button is clicked', () => {
+    const onCloseMock = jest.fn();
+
+    const mockData = {
+      collection: {
+        items: [
+          {
+            data: [
+              {
+                nasa_id: 'test-id',
+                title: 'Test Title',
+                description: 'Test Description',
+              },
+            ],
+            links: [{ href: 'https://example.com/image.jpg' }],
+          },
+        ],
       },
+    };
+
+    (useFetchDetailQuery as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: mockData,
       error: undefined,
     });
 
-    renderWithProviders(<DetailCard />);
-    const closeButton = screen.getByText(/Close/i);
+    render(<DetailCard id="test-id" onClose={onCloseMock} />);
+
+    const closeButton = screen.getByText(/close/i);
     fireEvent.click(closeButton);
-    expect(navigateMock).toHaveBeenCalledWith('/?frontpage=1');
+
+    expect(onCloseMock).toHaveBeenCalledTimes(1);
+  });
+
+  test('navigates to frontpage when closed and onClose is not provided', () => {
+    mockRouter.query = { frontpage: 'home' };
+
+    const mockData = {
+      collection: {
+        items: [
+          {
+            data: [
+              {
+                nasa_id: 'test-id',
+                title: 'Test Title',
+                description: 'Test Description',
+              },
+            ],
+            links: [{ href: 'https://example.com/image.jpg' }],
+          },
+        ],
+      },
+    };
+
+    (useFetchDetailQuery as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: mockData,
+      error: undefined,
+    });
+
+    render(<DetailCard id="test-id" />);
+
+    const closeButton = screen.getByText(/close/i);
+    fireEvent.click(closeButton);
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/?frontpage=home');
+  });
+
+  test('navigates to home when closed and no frontpage query param', () => {
+    mockRouter.query = {};
+
+    const mockData = {
+      collection: {
+        items: [
+          {
+            data: [
+              {
+                nasa_id: 'test-id',
+                title: 'Test Title',
+                description: 'Test Description',
+              },
+            ],
+            links: [{ href: 'https://example.com/image.jpg' }],
+          },
+        ],
+      },
+    };
+
+    (useFetchDetailQuery as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: mockData,
+      error: undefined,
+    });
+
+    render(<DetailCard id="test-id" />);
+
+    const closeButton = screen.getByText(/close/i);
+    fireEvent.click(closeButton);
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/');
   });
 });

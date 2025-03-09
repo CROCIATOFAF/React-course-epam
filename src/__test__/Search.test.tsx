@@ -1,22 +1,17 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Search from '../components/Search/Search';
+import { setSearchTerm } from '../utils/storage';
 
-vi.mock('../utils/storage', () => ({
-  getSearchTerm: () => 'initial search',
-  setSearchTerm: vi.fn(),
+jest.mock('@/utils/storage', () => ({
+  getSearchTerm: jest.fn(() => 'initial search'),
+  setSearchTerm: jest.fn(),
 }));
 
-import { setSearchTerm } from '../utils/storage';
-import type { Mock } from 'vitest';
-const mockedSetSearchTerm = setSearchTerm as unknown as Mock;
-
 describe('Search Component', () => {
-  const onSearchSubmitMock = vi.fn();
+  const onSearchSubmitMock = jest.fn();
 
   beforeEach(() => {
-    onSearchSubmitMock.mockClear();
-    mockedSetSearchTerm.mockClear();
+    jest.clearAllMocks();
   });
 
   it('retrieves the value from local storage on mount', () => {
@@ -34,6 +29,39 @@ describe('Search Component', () => {
     fireEvent.click(button);
 
     expect(onSearchSubmitMock).toHaveBeenCalledWith('Orion');
-    expect(mockedSetSearchTerm).toHaveBeenCalledWith('Orion');
+    expect(setSearchTerm).toHaveBeenCalledWith('Orion');
+  });
+
+  it('calls onSearchSubmit when Enter key is pressed', () => {
+    render(<Search onSearchSubmit={onSearchSubmitMock} />);
+    const input = screen.getByPlaceholderText(/Search for .../i);
+
+    fireEvent.change(input, { target: { value: 'Galaxy' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onSearchSubmitMock).toHaveBeenCalledWith('Galaxy');
+    expect(setSearchTerm).toHaveBeenCalledWith('Galaxy');
+  });
+
+  it('disables search button when input is empty', () => {
+    render(<Search onSearchSubmit={onSearchSubmitMock} />);
+    const button = screen.getByRole('button', { name: /Search/i });
+    expect(button).toBeDisabled();
+
+    const input = screen.getByPlaceholderText(/Search for .../i);
+    fireEvent.change(input, { target: { value: 'Saturn' } });
+    expect(button).not.toBeDisabled();
+  });
+
+  it('does not call onSearchSubmit if input is only whitespace', () => {
+    render(<Search onSearchSubmit={onSearchSubmitMock} />);
+    const input = screen.getByPlaceholderText(/Search for .../i);
+    const button = screen.getByRole('button', { name: /Search/i });
+
+    fireEvent.change(input, { target: { value: '   ' } });
+    fireEvent.click(button);
+
+    expect(onSearchSubmitMock).not.toHaveBeenCalled();
+    expect(setSearchTerm).not.toHaveBeenCalled();
   });
 });

@@ -15,6 +15,11 @@
   max-width: 350px;
 }
 
+.detailCard h3 {
+  color: var(--card-text);
+}
+
 .detailCard p {
   font-size: 15px;
+  color: var(--card-text);
 }

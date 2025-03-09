@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import Spinner from '../Spinner/Spinner';
 import styles from './DetailCard.module.css';
 import { useFetchDetailQuery } from '../services/api';
@@ -11,18 +11,24 @@ interface CardDetail {
   image?: string;
 }
 
-const DetailCard: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+interface DetailCardProps {
+  id?: string;
+  onClose?: () => void;
+}
 
-  const { data, error, isLoading } = useFetchDetailQuery(id || '', {
-    skip: !id,
-  });
+const DetailCard: React.FC<DetailCardProps> = ({ id: propId, onClose }) => {
+  const router = useRouter();
+  const id =
+    propId || (typeof router.query.id === 'string' ? router.query.id : '');
+  const { data, error, isLoading } = useFetchDetailQuery(id, { skip: !id });
 
   const handleClose = () => {
-    const frontpage = searchParams.get('frontpage');
-    navigate(frontpage ? `/?frontpage=${frontpage}` : '/');
+    if (onClose) {
+      onClose();
+    } else {
+      const frontpage = router.query.frontpage;
+      router.push(frontpage ? `/?frontpage=${frontpage}` : '/');
+    }
   };
 
   if (isLoading) return <Spinner />;

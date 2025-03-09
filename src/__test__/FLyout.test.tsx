@@ -4,13 +4,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Flyout from '../components/FLyout/Flyout';
 import { selectedItemsReducer, unselectAll } from '../store';
 import type { RootState } from '../store';
+import '@testing-library/jest-dom';
 
-if (!URL.createObjectURL) {
-  URL.createObjectURL = () => 'blob:url';
-}
-if (!URL.revokeObjectURL) {
-  URL.revokeObjectURL = () => {};
-}
+global.URL.createObjectURL = jest.fn(() => 'blob:url');
+global.URL.revokeObjectURL = jest.fn();
 
 const rootReducer = combineReducers({
   selectedItems: selectedItemsReducer,
@@ -34,11 +31,12 @@ const renderWithStore = (preloadedState: Partial<RootState>) => {
 describe('Flyout Component', () => {
   afterEach(() => {
     document.body.querySelectorAll('a').forEach((node) => node.remove());
+    jest.clearAllMocks();
   });
 
   it('renders nothing when no items are selected', () => {
     renderWithStore({ selectedItems: { items: {} } });
-    expect(screen.queryByText(/selected/)).toBeNull();
+    expect(screen.queryByText(/selected/i)).not.toBeInTheDocument();
   });
 
   it('renders correct text and buttons when items are selected', () => {
@@ -54,7 +52,9 @@ describe('Flyout Component', () => {
         },
       },
     };
+
     renderWithStore(preloadedState);
+
     expect(screen.getByText(/1 item selected/i)).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /Unselect all/i })
@@ -64,7 +64,7 @@ describe('Flyout Component', () => {
     ).toBeInTheDocument();
   });
 
-  it('dispatches unselectAll when "Unselect all" button is clicked', async () => {
+  it("dispatches unselectAll when 'Unselect all' button is clicked", async () => {
     const preloadedState = {
       selectedItems: {
         items: {
@@ -77,26 +77,24 @@ describe('Flyout Component', () => {
         },
       },
     };
-    const store = configureStore({
-      reducer: rootReducer,
-      preloadedState,
-    });
-    const dispatchSpy = vi.spyOn(store, 'dispatch');
+
+    const store = configureStore({ reducer: rootReducer, preloadedState });
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+
     render(
       <Provider store={store}>
         <Flyout />
       </Provider>
     );
-    const unselectButton = screen.getByRole('button', {
-      name: /Unselect all/i,
-    });
-    fireEvent.click(unselectButton);
+
+    fireEvent.click(screen.getByRole('button', { name: /Unselect all/i }));
+
     await waitFor(() => {
       expect(dispatchSpy).toHaveBeenCalledWith(unselectAll());
     });
   });
 
-  it('triggers download when "Download" button is clicked', async () => {
+  it("triggers download when 'Download' button is clicked", async () => {
     const preloadedState = {
       selectedItems: {
         items: {
@@ -110,28 +108,18 @@ describe('Flyout Component', () => {
       },
     };
 
-    const createObjectURLSpy = vi
-      .spyOn(URL, 'createObjectURL')
-      .mockReturnValue('blob:url');
-
-    const revokeObjectURLSpy = vi
-      .spyOn(URL, 'revokeObjectURL')
-      .mockImplementation(() => {});
-
-    const appendChildSpy = vi.spyOn(document.body, 'appendChild');
-    const removeChildSpy = vi.spyOn(document.body, 'removeChild');
+    const appendChildSpy = jest.spyOn(document.body, 'appendChild');
+    const removeChildSpy = jest.spyOn(document.body, 'removeChild');
 
     renderWithStore(preloadedState);
-    const downloadButton = screen.getByRole('button', { name: /Download/i });
-    fireEvent.click(downloadButton);
+    fireEvent.click(screen.getByRole('button', { name: /Download/i }));
 
     await waitFor(() => {
-      expect(createObjectURLSpy).toHaveBeenCalled();
+      expect(global.URL.createObjectURL).toHaveBeenCalled();
       expect(appendChildSpy).toHaveBeenCalled();
+      expect(removeChildSpy).toHaveBeenCalled();
     });
 
-    createObjectURLSpy.mockRestore();
-    revokeObjectURLSpy.mockRestore();
     appendChildSpy.mockRestore();
     removeChildSpy.mockRestore();
   });

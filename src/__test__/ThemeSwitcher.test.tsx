@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ThemeSwitcher from '../components/ThemeSwitcher/ThemeSwitcher';
 import { ThemeContext, Theme } from '../context/ThemeContext';
+import '@testing-library/jest-dom';
 
-const mockSetTheme = vi.fn();
+const mockSetTheme = jest.fn();
 
 const renderWithThemeContext = (theme: Theme = 'dark') => {
   return render(
@@ -12,7 +13,7 @@ const renderWithThemeContext = (theme: Theme = 'dark') => {
   );
 };
 
-describe('ThemeSwitcher', () => {
+describe('ThemeSwitcher Component', () => {
   beforeEach(() => {
     mockSetTheme.mockClear();
   });
@@ -36,6 +37,7 @@ describe('ThemeSwitcher', () => {
 
     fireEvent.change(select, { target: { value: 'light' } });
 
+    expect(mockSetTheme).toHaveBeenCalledTimes(1);
     expect(mockSetTheme).toHaveBeenCalledWith('light');
   });
 });

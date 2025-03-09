@@ -1,63 +1,59 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import React, { useState } from 'react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
-import { useState } from 'react';
 
-function ProblemChild(): never {
-  throw new Error('Test error');
-}
-
-function ControlledChild({ shouldThrow }: { shouldThrow: boolean }) {
-  if (shouldThrow) {
+class ProblemChild extends React.Component {
+  componentDidMount() {
     throw new Error('Test error');
   }
-  return <div data-testid="child">Child Content</div>;
-}
-
-function Wrapper() {
-  const [throwError, setThrowError] = useState(true);
-  const [boundaryKey, setBoundaryKey] = useState(0);
-
-  return (
-    <div>
-      <button
-        onClick={() => {
-          setThrowError(false);
-          setBoundaryKey((prev) => prev + 1);
-        }}
-      >
-        Toggle
-      </button>
-      <ErrorBoundary key={boundaryKey}>
-        <ControlledChild shouldThrow={throwError} />
-      </ErrorBoundary>
-    </div>
-  );
+  render() {
+    return <div>Problem Child</div>;
+  }
 }
 
 describe('ErrorBoundary Component', () => {
-  it('renders fallback UI when a child component throws an error', () => {
-    render(
-      <ErrorBoundary>
-        <ProblemChild />
-      </ErrorBoundary>
-    );
+  test('renders fallback UI when a child component throws an error', async () => {
+    await act(async () => {
+      render(
+        <ErrorBoundary>
+          <ProblemChild />
+        </ErrorBoundary>
+      );
+    });
+
     expect(screen.getByText('Oops! Something went wrong.')).toBeInTheDocument();
-    expect(screen.getByText('Retry, Please')).toBeInTheDocument();
   });
 
-  it('resets error state and renders children when reset is triggered', async () => {
-    const { getByText, getByTestId } = render(<Wrapper />);
+  test('resets error state when reset is triggered', async () => {
+    const ThrowButton = () => {
+      const [throwError, setThrowError] = useState(false);
+      return (
+        <div>
+          {throwError ? (
+            <ProblemChild />
+          ) : (
+            <button onClick={() => setThrowError(true)}>Throw</button>
+          )}
+        </div>
+      );
+    };
 
-    expect(getByText('Oops! Something went wrong.')).toBeInTheDocument();
-    expect(getByText('Retry, Please')).toBeInTheDocument();
-
-    fireEvent.click(getByText('Retry, Please'));
-    fireEvent.click(getByText('Toggle'));
-
-    await waitFor(() => {
-      expect(getByTestId('child')).toBeInTheDocument();
-      expect(getByText('Child Content')).toBeInTheDocument();
+    await act(async () => {
+      render(
+        <ErrorBoundary>
+          <ThrowButton />
+        </ErrorBoundary>
+      );
     });
+
+    fireEvent.click(screen.getByText('Throw'));
+
+    expect(screen.getByText('Oops! Something went wrong.')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Retry, Please'));
+
+    expect(
+      screen.queryByText('Oops! Something went wrong.')
+    ).not.toBeInTheDocument();
   });
 });

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import styles from './Home.module.css';
+import { useRouter } from 'next/router';
+import styles from '../styles/index.module.css';
+import VideoBackground from '../components/VideoBackground/VideoBackground';
 import Search from '../components/Search/Search';
 import CardList from '../components/CardList/CardList';
 import Spinner from '../components/Spinner/Spinner';
 import Pagination from '../components/Pagination/Pagination';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import DetailCard from '../components/DetailCard/DetailCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, selectItem, unselectItem } from '../store';
 import { selectSelectedItems } from '../store';
@@ -12,24 +14,23 @@ import { getSearchTerm, setSearchTerm } from '../utils/storage';
 import { useFetchNasaImagesQuery } from '../components/services/api';
 import { CardData } from '../components/services/nasaApi';
 
-interface HomeProps {
-  onSearchSubmit: (term: string) => void;
-}
-
-const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
-  const [searchTerm, setLocalSearchTerm] = useState<string>(getSearchTerm());
-  const [forceError, setForceError] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+const Home: React.FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const selectedItems = useSelector((state: RootState) =>
     selectSelectedItems(state)
   );
   const selectedItemIds = selectedItems.map((item) => item.id);
+
+  const [searchTerm, setLocalSearchTerm] = useState<string>(getSearchTerm());
+  const [forceError, setForceError] = useState<boolean>(false);
+  const [showDetail, setShowDetail] = useState<string | null>(null);
+
+  const currentPage = Number(router.query.page) || 1;
+
   const { data, error, isLoading } = useFetchNasaImagesQuery(searchTerm);
   const items: CardData[] = data || [];
   const itemsPerPage = 10;
-  const currentPage = Number(searchParams.get('page')) || 1;
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const currentItems = items.slice(
     (currentPage - 1) * itemsPerPage,
@@ -39,8 +40,10 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
   const handleSearchSubmit = (term: string) => {
     setSearchTerm(term);
     setLocalSearchTerm(term);
-    onSearchSubmit(term);
-    setSearchParams({ page: '1' });
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: '1' },
+    });
   };
 
   const handleThrowError = () => {
@@ -48,13 +51,15 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
   };
 
   const handlePageChange = (page: number) => {
-    setSearchParams({ page: page.toString() });
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: page.toString() },
+    });
   };
 
   const handleCardClick = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const page = searchParams.get('page') || '1';
-    navigate(`/details/${id}?frontpage=${page}`);
+    setShowDetail(id);
   };
 
   const handleSelectChange = (id: string, selected: boolean) => {
@@ -73,6 +78,7 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
 
   return (
     <div className={styles.homeContainer}>
+      <VideoBackground />
       <Search onSearchSubmit={handleSearchSubmit} />
 
       {isLoading && <Spinner />}
@@ -99,6 +105,21 @@ const Home: React.FC<HomeProps> = ({ onSearchSubmit }) => {
         </>
       ) : (
         <div>No results found.</div>
+      )}
+
+      {showDetail && (
+        <div className={styles.overlay} onClick={() => setShowDetail(null)}>
+          <div
+            className={styles.sidePanel}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <DetailCard
+              id={showDetail}
+              onClose={() => setShowDetail(null)}
+              key={showDetail}
+            />
+          </div>
+        </div>
       )}
 
       <button

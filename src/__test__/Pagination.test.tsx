@@ -1,12 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Pagination from '../components/Pagination/Pagination';
 
 describe('Pagination Component', () => {
-  const onPageChangeMock = vi.fn();
+  const onPageChangeMock = jest.fn();
 
   beforeEach(() => {
-    onPageChangeMock.mockClear();
+    jest.clearAllMocks();
   });
 
   it('renders the correct number of page buttons', () => {
@@ -45,5 +44,31 @@ describe('Pagination Component', () => {
     fireEvent.click(button);
     expect(onPageChangeMock).toHaveBeenCalledTimes(1);
     expect(onPageChangeMock).toHaveBeenCalledWith(4);
+  });
+
+  it('does not call onPageChange when clicking the disabled current page button', () => {
+    render(
+      <Pagination
+        currentPage={2}
+        totalPages={5}
+        onPageChange={onPageChangeMock}
+      />
+    );
+    const currentPageButton = screen.getByRole('button', { name: '2' });
+    fireEvent.click(currentPageButton);
+    expect(onPageChangeMock).not.toHaveBeenCalled();
+  });
+
+  it('does not render pagination when totalPages is 1', () => {
+    render(
+      <Pagination
+        currentPage={1}
+        totalPages={1}
+        onPageChange={onPageChangeMock}
+      />
+    );
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons.length).toBe(1);
+    expect(buttons[0]).toBeDisabled();
   });
 });

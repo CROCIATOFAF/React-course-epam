@@ -4,7 +4,7 @@ import styles from './VideoBackground.module.css';
 
 const VideoBackground: React.FC = () => {
   const { theme } = useContext(ThemeContext);
-  const videoSource = theme === 'dark' ? 'earth.mp4' : 'morning.mp4';
+  const videoSource = theme === 'dark' ? '/earth.mp4' : '/morning.mp4';
 
   return (
     <video key={theme} className={styles.videoBackground} autoPlay muted loop>

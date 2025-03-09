@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Search.module.css';
 import { getSearchTerm, setSearchTerm } from '../../utils/storage';
 
@@ -7,7 +7,15 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ onSearchSubmit }) => {
-  const [searchTerm, setLocalSearchTerm] = useState<string>(getSearchTerm());
+  const [mounted, setMounted] = useState(false);
+  const [searchTerm, setLocalSearchTerm] = useState<string>('');
+
+  useEffect(() => {
+    setLocalSearchTerm(getSearchTerm());
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLocalSearchTerm(event.target.value);

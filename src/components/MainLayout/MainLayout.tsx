@@ -1,30 +1,28 @@
 import React from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import Home from '../../pages/Home';
+import { useRouter } from 'next/router';
 import styles from './MainLayout.module.css';
 
-const MainLayout: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+interface MainLayoutProps {
+  children?: React.ReactNode;
+}
 
-  const detailsOpen = location.pathname.startsWith('/details');
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const router = useRouter();
+  const detailsOpen = router.pathname.startsWith('/details');
 
   const handleLeftSectionClick = () => {
-    if (detailsOpen) {
-      const params = new URLSearchParams(location.search);
-      const frontpage = params.get('frontpage');
-      navigate(frontpage ? `/?frontpage=${frontpage}` : '/');
-    }
+    const frontpage = router.query.frontpage;
+    router.push(frontpage ? `/?frontpage=${frontpage}` : '/');
   };
 
   return (
     <div className={styles.mainLayout}>
       <div className={styles.leftSection} onClick={handleLeftSectionClick}>
-        <Home onSearchSubmit={() => {}} />
+        <h1 onClick={() => router.push('/')}>Home</h1>
       </div>
       {detailsOpen && (
         <div data-testid="outlet" className={styles.rightSection}>
-          <Outlet />
+          {children}
         </div>
       )}
     </div>

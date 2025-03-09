@@ -1,9 +1,14 @@
 const SEARCH_TERM_KEY = 'searchTerm';
 
 export const getSearchTerm = (): string => {
-  return localStorage.getItem(SEARCH_TERM_KEY) || '';
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem(SEARCH_TERM_KEY) || '';
+  }
+  return '';
 };
 
 export const setSearchTerm = (term: string): void => {
-  localStorage.setItem(SEARCH_TERM_KEY, term);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(SEARCH_TERM_KEY, term);
+  }
 };
