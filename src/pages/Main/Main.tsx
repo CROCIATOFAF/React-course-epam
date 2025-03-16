@@ -1,66 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import type { FormData } from '../../types';
-// import styles from './Main.module.css';
-
-interface LocationState {
-  newEntryId?: string;
-}
+import { RootState } from '../../store/store';
+import { clearHighlightedEntry } from '../../store/formsSlice';
+import styles from './Main.module.css';
 
 const Main: React.FC = () => {
-  const location = useLocation() as LocationState;
-  const newEntryId = location.newEntryId;
+  const highlightedEntryId = useSelector(
+    (state: RootState) => state.forms.highlightedEntryId
+  );
 
   const entries = useSelector((state: RootState) => state.forms.entries);
-  const [highlightId, setHighlightId] = useState<string | undefined>(
-    newEntryId
+  const dispatch = useDispatch();
+  const [localHighlightId, setLocalHighlightId] = useState<string | undefined>(
+    highlightedEntryId || undefined
   );
 
   useEffect(() => {
-    if (newEntryId) {
+    if (highlightedEntryId) {
+      setLocalHighlightId(highlightedEntryId);
       const timer = setTimeout(() => {
-        setHighlightId(undefined);
-      }, 3000);
+        dispatch(clearHighlightedEntry());
+        setLocalHighlightId(undefined);
+      }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [newEntryId]);
+  }, [highlightedEntryId, dispatch]);
 
   return (
-    <div>
+    <div className={styles.mainContainer}>
       <h1>React Forms - Main Page</h1>
       {entries.map((entry: FormData) => (
         <div
           key={entry.id}
-          style={{
-            border:
-              highlightId === entry.id ? '2px solid red' : '1px solid black',
-            marginBottom: '1rem',
-            padding: '1rem',
-          }}
+          className={`${styles.card} ${
+            localHighlightId === entry.id ? styles.highlight : ''
+          }`}
         >
-          <p>
-            <strong>Name:</strong> {entry.name}
-          </p>
-          <p>
-            <strong>Age:</strong> {entry.age}
-          </p>
-          <p>
-            <strong>Email:</strong> {entry.email}
-          </p>
-          <p>
-            <strong>Gender:</strong> {entry.gender}
-          </p>
-          <p>
-            <strong>Country:</strong> {entry.country}
-          </p>
-          <p>
-            <strong>Image:</strong>{' '}
+          <div className={styles.fieldLabel}>Name:</div>
+          <div className={styles.fieldValue}>{entry.name}</div>
+
+          <div className={styles.fieldLabel}>Age:</div>
+          <div className={styles.fieldValue}>{entry.age}</div>
+
+          <div className={styles.fieldLabel}>Email:</div>
+          <div className={styles.fieldValue}>{entry.email}</div>
+
+          <div className={styles.fieldLabel}>Gender:</div>
+          <div className={styles.fieldValue}>{entry.gender}</div>
+
+          <div className={styles.fieldLabel}>Country:</div>
+          <div className={styles.fieldValue}>{entry.country}</div>
+
+          <div className={styles.fieldLabel}>Image:</div>
+          <div className={styles.fieldValue}>
             {entry.image && (
               <img src={entry.image} alt="uploaded" width={100} />
             )}
-          </p>
+          </div>
         </div>
       ))}
     </div>

@@ -1,0 +1,42 @@
+.mainContainer {
+  padding: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 150px auto;
+  gap: 0.5rem 1rem;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition:
+    border-color 1s ease,
+    background-color 1s ease;
+  background-color: #646cff;
+  margin-top: 15px;
+  font-size: 22px;
+}
+
+.highlight {
+  border-color: red;
+  background-color: blueviolet;
+}
+
+.fieldLabel {
+  font-weight: bold;
+  text-align: right;
+  padding-top: 0.25rem;
+}
+
+.fieldValue img {
+  width: 350px;
+  height: 250px;
+  border-radius: 12px;
+}
+
+.fieldValue {
+  text-align: left;
+  padding-top: 0.25rem;
+  word-break: break-word;
+}

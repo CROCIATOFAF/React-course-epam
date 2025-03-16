@@ -4,6 +4,7 @@ import type { FormData } from '../types';
 interface FormsState {
   entries: FormData[];
   countries: string[];
+  highlightedEntryId: string | null;
 }
 
 const prioritizedCountries = [
@@ -230,6 +231,7 @@ const countries = [
 const initialState: FormsState = {
   entries: [],
   countries,
+  highlightedEntryId: null,
 };
 
 const formsSlice = createSlice({
@@ -238,9 +240,13 @@ const formsSlice = createSlice({
   reducers: {
     addFormEntry: (state, action: PayloadAction<FormData>) => {
       state.entries.push(action.payload);
+      state.highlightedEntryId = action.payload.id;
+    },
+    clearHighlightedEntry: (state) => {
+      state.highlightedEntryId = null;
     },
   },
 });
 
-export const { addFormEntry } = formsSlice.actions;
+export const { addFormEntry, clearHighlightedEntry } = formsSlice.actions;
 export default formsSlice.reducer;

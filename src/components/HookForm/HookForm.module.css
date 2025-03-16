@@ -6,7 +6,7 @@
 }
 
 form {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .label {
@@ -32,6 +32,6 @@ form {
 .errorMessage {
   margin: 0;
   color: red;
-  font-size: 0.730rem;
+  font-size: 0.73rem;
   min-height: 2.2rem;
 }
