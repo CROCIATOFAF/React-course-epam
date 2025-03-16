@@ -20,7 +20,8 @@ const schema = yup
       .required('Name is required'),
     age: yup
       .number()
-      .min(0, 'Age must be non-negative')
+      .min(14, 'Age must be at least 14')
+      .max(100, 'Age must be at most 100')
       .required('Age is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup
@@ -49,7 +50,11 @@ const schema = yup
           : new DataTransfer().files
       )
       .default(new DataTransfer().files)
-      .required(),
+      .test(
+        'fileRequired',
+        'Image is required',
+        (value) => value && value.length > 0
+      ),
   })
   .required();
 

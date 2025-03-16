@@ -14,7 +14,8 @@ const schema = yup.object().shape({
     .required('Name is required'),
   age: yup
     .number()
-    .min(0, 'Age must be non-negative')
+    .min(14, 'Age must be at least 14')
+    .max(100, 'Age must be at most 100')
     .required('Age is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
   password: yup
@@ -45,7 +46,45 @@ const UncontrolledForm: React.FC = () => {
   const [imageError, setImageError] = useState<string | null>(null);
   const [country, setCountry] = useState<string>('');
 
-  const handleSubmit = async (e: FormEvent) => {
+  const validateForm = async (): Promise<void> => {
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
+    formData.set('country', country);
+    const data = {
+      name: formData.get('name') as string,
+      age: Number(formData.get('age')),
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      confirmPassword: formData.get('confirmPassword') as string,
+      gender: formData.get('gender') as string,
+      termsAccepted: formData.get('termsAccepted') === 'on',
+      country: formData.get('country') as string,
+    };
+    try {
+      await schema.validate(data, { abortEarly: false });
+      setErrors({});
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const errorsByField = err.inner.reduce(
+          (acc: Record<string, string>, error) => {
+            if (error.path) {
+              acc[error.path] = error.message;
+            }
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+        setErrors(errorsByField);
+      }
+    }
+  };
+
+  const handleFieldChange = (field: string) => async () => {
+    setErrors((prev) => ({ ...prev, [field]: '' }));
+    await validateForm();
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors({});
     setImageError(null);
@@ -93,7 +132,7 @@ const UncontrolledForm: React.FC = () => {
             }
             return acc;
           },
-          {}
+          {} as Record<string, string>
         );
         setErrors(errorsByField);
       } else {
@@ -111,6 +150,10 @@ const UncontrolledForm: React.FC = () => {
     });
   };
 
+  const isSubmitDisabled: boolean =
+    Object.values(errors).some((msg) => msg.trim() !== '') ||
+    imageError !== null;
+
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
       <div className={styles.fieldContainer}>
@@ -124,6 +167,7 @@ const UncontrolledForm: React.FC = () => {
             type="text"
             autoComplete="name"
             className={styles.inputField}
+            onChange={handleFieldChange('name')}
           />
           <p className={styles.errorMessage}>{errors.name || ' '}</p>
         </div>
@@ -140,6 +184,7 @@ const UncontrolledForm: React.FC = () => {
             type="number"
             autoComplete="off"
             className={styles.inputField}
+            onChange={handleFieldChange('age')}
           />
           <p className={styles.errorMessage}>{errors.age || ' '}</p>
         </div>
@@ -156,6 +201,7 @@ const UncontrolledForm: React.FC = () => {
             type="email"
             autoComplete="email"
             className={styles.inputField}
+            onChange={handleFieldChange('email')}
           />
           <p className={styles.errorMessage}>{errors.email || ' '}</p>
         </div>
@@ -172,6 +218,7 @@ const UncontrolledForm: React.FC = () => {
             type="password"
             autoComplete="new-password"
             className={styles.inputField}
+            onChange={handleFieldChange('password')}
           />
           <p className={styles.errorMessage}>{errors.password || ' '}</p>
         </div>
@@ -188,6 +235,7 @@ const UncontrolledForm: React.FC = () => {
             type="password"
             autoComplete="new-password"
             className={styles.inputField}
+            onChange={handleFieldChange('confirmPassword')}
           />
           <p className={styles.errorMessage}>{errors.confirmPassword || ' '}</p>
         </div>
@@ -203,6 +251,7 @@ const UncontrolledForm: React.FC = () => {
             name="gender"
             autoComplete="off"
             className={styles.inputField}
+            onChange={handleFieldChange('gender')}
           >
             <option value="">Select Gender</option>
             <option value="male">Male</option>
@@ -224,8 +273,27 @@ const UncontrolledForm: React.FC = () => {
             type="checkbox"
             autoComplete="off"
             className={styles.inputField}
+            onChange={handleFieldChange('termsAccepted')}
           />
           <p className={styles.errorMessage}>{errors.termsAccepted || ' '}</p>
+        </div>
+      </div>
+
+      <div className={styles.fieldContainer}>
+        <label htmlFor="country" className={styles.label}>
+          Country:
+        </label>
+        <div className={styles.inputContainer}>
+          <CountryAutocomplete
+            id="country"
+            label="Country"
+            value={country}
+            onChange={(val: string) => {
+              setCountry(val);
+              setErrors((prev) => ({ ...prev, country: '' }));
+            }}
+          />
+          <p className={styles.errorMessage}>{errors.country || ' '}</p>
         </div>
       </div>
 
@@ -246,23 +314,9 @@ const UncontrolledForm: React.FC = () => {
         </div>
       </div>
 
-      <div className={styles.fieldContainer}>
-        <label htmlFor="country" className={styles.label}>
-          Country:
-        </label>
-        <div className={styles.inputContainer}>
-          <CountryAutocomplete
-            id="country"
-            label="Country"
-            value={country}
-            onChange={setCountry}
-          />
-          <input type="hidden" name="country" value={country} />
-          <p className={styles.errorMessage}>{errors.country || ' '}</p>
-        </div>
-      </div>
-
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={isSubmitDisabled}>
+        Submit
+      </button>
     </form>
   );
 };

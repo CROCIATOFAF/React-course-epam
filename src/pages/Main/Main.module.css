@@ -6,7 +6,7 @@
   display: grid;
   grid-template-columns: 150px auto;
   gap: 0.5rem 1rem;
-  border: 1px solid black;
+  border: 5px solid cornflowerblue;
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;

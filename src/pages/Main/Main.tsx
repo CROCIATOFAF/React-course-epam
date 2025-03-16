@@ -9,7 +9,6 @@ const Main: React.FC = () => {
   const highlightedEntryId = useSelector(
     (state: RootState) => state.forms.highlightedEntryId
   );
-
   const entries = useSelector((state: RootState) => state.forms.entries);
   const dispatch = useDispatch();
   const [localHighlightId, setLocalHighlightId] = useState<string | undefined>(
@@ -27,10 +26,12 @@ const Main: React.FC = () => {
     }
   }, [highlightedEntryId, dispatch]);
 
+  const reversedEntries = [...entries].reverse();
+
   return (
     <div className={styles.mainContainer}>
       <h1>React Forms - Main Page</h1>
-      {entries.map((entry: FormData) => (
+      {reversedEntries.map((entry: FormData) => (
         <div
           key={entry.id}
           className={`${styles.card} ${
