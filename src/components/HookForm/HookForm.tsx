@@ -241,13 +241,16 @@ const HookForm: React.FC = () => {
           Terms:
         </label>
         <div className={styles.inputContainer}>
-          <input
-            id="termsAccepted"
-            type="checkbox"
-            {...register('termsAccepted')}
-            className={styles.inputField}
-            autoComplete="off"
-          />
+          <div className={styles.inputContainer__wrapper}>
+            <input
+              id="termsAccepted"
+              type="checkbox"
+              {...register('termsAccepted')}
+              className={`${styles.inputField} ${styles.checkbox}`}
+              autoComplete="off"
+            />
+            <p>Accept Our Terms Of Use</p>
+          </div>
           <p className={styles.errorMessage}>
             {errors.termsAccepted?.message || ' '}
           </p>

@@ -267,14 +267,17 @@ const UncontrolledForm: React.FC = () => {
           Terms:
         </label>
         <div className={styles.inputContainer}>
-          <input
-            id="termsAccepted"
-            name="termsAccepted"
-            type="checkbox"
-            autoComplete="off"
-            className={styles.inputField}
-            onChange={handleFieldChange('termsAccepted')}
-          />
+          <div className={styles.inputContainer__wrapper}>
+            <input
+              id="termsAccepted"
+              name="termsAccepted"
+              type="checkbox"
+              autoComplete="off"
+              className={`${styles.inputField} ${styles.checkbox}`}
+              onChange={handleFieldChange('termsAccepted')}
+            />
+            <p>Accept Our Terms Of Use</p>
+          </div>
           <p className={styles.errorMessage}>{errors.termsAccepted || ' '}</p>
         </div>
       </div>

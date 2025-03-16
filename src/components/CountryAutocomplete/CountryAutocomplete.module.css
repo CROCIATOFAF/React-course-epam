@@ -27,6 +27,7 @@
 .suggestionItem {
   padding: 4px 8px;
   cursor: pointer;
+  color: #646cff;
 }
 
 .suggestionItem:hover {
