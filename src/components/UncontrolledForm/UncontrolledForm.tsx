@@ -5,6 +5,7 @@ import { addFormEntry } from '../../store/formsSlice';
 import { useNavigate } from 'react-router-dom';
 import type { FormData } from '../../types';
 import CountryAutocomplete from '../CountryAutocomplete/CountryAutocomplete';
+import styles from './UncontrolledForm.module.css';
 
 const schema = yup.object().shape({
   name: yup
@@ -40,13 +41,13 @@ const UncontrolledForm: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [imageError, setImageError] = useState<string | null>(null);
   const [country, setCountry] = useState<string>('');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setErrors([]);
+    setErrors({});
     setImageError(null);
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
@@ -85,10 +86,18 @@ const UncontrolledForm: React.FC = () => {
       navigate('/', { state: { newEntryId: entry.id } });
     } catch (error) {
       if (error instanceof yup.ValidationError) {
-        const errorMessages = error.inner.map((err) => err.message);
-        setErrors(errorMessages);
+        const errorsByField = error.inner.reduce(
+          (acc: Record<string, string>, err) => {
+            if (err.path) {
+              acc[err.path] = err.message;
+            }
+            return acc;
+          },
+          {}
+        );
+        setErrors(errorsByField);
       } else {
-        setErrors([String(error)]);
+        setErrors({ form: String(error) });
       }
     }
   };
@@ -104,93 +113,153 @@ const UncontrolledForm: React.FC = () => {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
-      {errors.length > 0 && (
-        <div style={{ color: 'red' }}>
-          {errors.map((err, index) => (
-            <p key={index}>{err}</p>
-          ))}
+      <div className={styles.fieldContainer}>
+        <label htmlFor="name" className={styles.label}>
+          Name:
+        </label>
+        <div className={styles.inputContainer}>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            className={styles.inputField}
+          />
+          <p className={styles.errorMessage}>{errors.name || ' '}</p>
         </div>
-      )}
-
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input id="name" name="name" type="text" autoComplete="name" />
       </div>
 
-      <div>
-        <label htmlFor="age">Age:</label>
-        <input id="age" name="age" type="number" autoComplete="off" />
+      <div className={styles.fieldContainer}>
+        <label htmlFor="age" className={styles.label}>
+          Age:
+        </label>
+        <div className={styles.inputContainer}>
+          <input
+            id="age"
+            name="age"
+            type="number"
+            autoComplete="off"
+            className={styles.inputField}
+          />
+          <p className={styles.errorMessage}>{errors.age || ' '}</p>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input id="email" name="email" type="email" autoComplete="email" />
+      <div className={styles.fieldContainer}>
+        <label htmlFor="email" className={styles.label}>
+          Email:
+        </label>
+        <div className={styles.inputContainer}>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            className={styles.inputField}
+          />
+          <p className={styles.errorMessage}>{errors.email || ' '}</p>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-        />
+      <div className={styles.fieldContainer}>
+        <label htmlFor="password" className={styles.label}>
+          Password:
+        </label>
+        <div className={styles.inputContainer}>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            className={styles.inputField}
+          />
+          <p className={styles.errorMessage}>{errors.password || ' '}</p>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          autoComplete="new-password"
-        />
+      <div className={styles.fieldContainer}>
+        <label htmlFor="confirmPassword" className={styles.label}>
+          Confirm Password:
+        </label>
+        <div className={styles.inputContainer}>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            className={styles.inputField}
+          />
+          <p className={styles.errorMessage}>{errors.confirmPassword || ' '}</p>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="gender">Gender:</label>
-        <select id="gender" name="gender" autoComplete="off">
-          <option value="">Select Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
+      <div className={styles.fieldContainer}>
+        <label htmlFor="gender" className={styles.label}>
+          Gender:
+        </label>
+        <div className={styles.inputContainer}>
+          <select
+            id="gender"
+            name="gender"
+            autoComplete="off"
+            className={styles.inputField}
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <p className={styles.errorMessage}>{errors.gender || ' '}</p>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="termsAccepted">
+      <div className={styles.fieldContainer}>
+        <label htmlFor="termsAccepted" className={styles.label}>
+          Terms:
+        </label>
+        <div className={styles.inputContainer}>
           <input
             id="termsAccepted"
             name="termsAccepted"
             type="checkbox"
             autoComplete="off"
-          />{' '}
-          Accept Terms and Conditions
+            className={styles.inputField}
+          />
+          <p className={styles.errorMessage}>{errors.termsAccepted || ' '}</p>
+        </div>
+      </div>
+
+      <div className={styles.fieldContainer}>
+        <label htmlFor="image" className={styles.label}>
+          Upload Picture:
         </label>
+        <div className={styles.inputContainer}>
+          <input
+            id="image"
+            name="image"
+            type="file"
+            accept="image/jpeg, image/png"
+            autoComplete="off"
+            className={styles.inputField}
+          />
+          <p className={styles.errorMessage}>{imageError || ' '}</p>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="image">Upload Picture:</label>
-        <input
-          id="image"
-          name="image"
-          type="file"
-          accept="image/jpeg, image/png"
-          autoComplete="off"
-        />
-        {imageError && <p style={{ color: 'red' }}>{imageError}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="country">Country:</label>
-        <CountryAutocomplete
-          id="country"
-          label="Country"
-          value={country}
-          onChange={setCountry}
-        />
-        {/* Hidden input to include the selected country in form submission */}
-        <input type="hidden" name="country" value={country} />
+      <div className={styles.fieldContainer}>
+        <label htmlFor="country" className={styles.label}>
+          Country:
+        </label>
+        <div className={styles.inputContainer}>
+          <CountryAutocomplete
+            id="country"
+            label="Country"
+            value={country}
+            onChange={setCountry}
+          />
+          <input type="hidden" name="country" value={country} />
+          <p className={styles.errorMessage}>{errors.country || ' '}</p>
+        </div>
       </div>
 
       <button type="submit">Submit</button>

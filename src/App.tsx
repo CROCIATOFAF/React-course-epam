@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Main from './pages/Main';
+import Main from './pages/Main/Main';
 import UncontrolledFormPage from './pages/UncontrolledFormPage';
 import HookFormPage from './pages/HookFormPage';
 import './App.css';

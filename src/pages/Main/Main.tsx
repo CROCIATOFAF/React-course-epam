@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { RootState } from '../../store/store';
 import { useLocation } from 'react-router-dom';
-import type { FormData } from '../types';
+import type { FormData } from '../../types';
+// import styles from './Main.module.css';
 
 interface LocationState {
   newEntryId?: string;

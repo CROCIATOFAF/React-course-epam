@@ -12,7 +12,7 @@ interface CountryAutocompleteProps {
 
 const CountryAutocomplete: React.FC<CountryAutocompleteProps> = ({
   id,
-  label,
+  // label,
   value,
   onChange,
 }) => {
@@ -50,13 +50,13 @@ const CountryAutocomplete: React.FC<CountryAutocompleteProps> = ({
 
   return (
     <div ref={wrapperRef} className={styles.autocompleteContainer}>
-      <label htmlFor={id} className={styles.label}>
+      {/* <label htmlFor={id} className={styles.label}>
         {label}:
-      </label>
+      </label> */}
       <input
         id={id}
         type="text"
-        className={styles.input}
+        className={styles.autocompleteInput}
         value={value}
         onChange={(e) => {
           onChange(e.target.value);
