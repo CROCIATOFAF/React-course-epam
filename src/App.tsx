@@ -1,35 +1,77 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import React, { useEffect, useState, useCallback, Profiler } from 'react';
+import Controls from './components/Controls/Controls';
+import FilteredCountries from './components/FilteredCountries/FilteredCountries';
+import { Country } from './types';
 import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0);
+const onRenderCallback = ((...args: unknown[]): void => {
+  console.log('Profiler onRender arguments:', args);
+}) as unknown as React.ProfilerOnRenderCallback;
+
+const App: React.FC = () => {
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortKey, setSortKey] = useState<'name' | 'population' | ''>('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+  useEffect(() => {
+    fetch('https://restcountries.com/v3.1/all')
+      .then((res) => res.json())
+      .then((data: Country[]) => setCountries(data))
+      .catch((err: unknown) => console.error('Error fetching countries:', err));
+  }, []);
+
+  const handleRegionChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedRegion(e.target.value);
+    },
+    []
+  );
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    []
+  );
+
+  const handleSortChange = useCallback(
+    (key: 'name' | 'population', order: 'asc' | 'desc') => {
+      setSortKey(key);
+      setSortOrder(order);
+    },
+    []
+  );
+
+  const visitedCountries = JSON.parse(
+    localStorage.getItem('visited') || '[]'
+  ) as string[];
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="App">
+      <h1>Country Explorer</h1>
+      <Controls
+        selectedRegion={selectedRegion}
+        onRegionChange={handleRegionChange}
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        onSortChange={handleSortChange}
+      />
+      <Profiler id="CountryList" onRender={onRenderCallback}>
+        <div className="countries-list">
+          <FilteredCountries
+            countries={countries}
+            selectedRegion={selectedRegion}
+            searchQuery={searchQuery}
+            sortKey={sortKey}
+            sortOrder={sortOrder}
+            visitedCountries={visitedCountries}
+          />
+        </div>
+      </Profiler>
+    </div>
   );
-}
+};
 
 export default App;

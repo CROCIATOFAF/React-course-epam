@@ -1,54 +1,76 @@
-# React + TypeScript + Vite
+## Performance Profiling
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Baseline (Without Memoization)
 
-Currently, two official plugins are available:
+In the unoptimized version (no useMemo, useCallback, or React.memo), the profiler recorded:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Commit Duration:**
+  - Ranged from ~1.1 ms up to 29.2 ms (with many commits around 17–18 ms).
+  - This indicates that the full component tree re-renders on every update.
+- **Render Duration:**
+  - Individual component render times were low (about 0.1–0.4 ms), but overall cost is high because every state change recalculates everything.
+- **Interactions:**
+  - Filtering, searching, and sorting triggered many re-renders.
 
-## Expanding the ESLint configuration
+**Screenshots (Baseline):**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+_Flame Graphs:_
+![Initial Flame Graph 1](./src/assets/screenshots/flame%20graph/flame%201.png)  
+![Initial Flame Graph 2](./src/assets/screenshots/flame%20graph/flame%202.png)  
+![Initial Flame Graph 3](./src/assets/screenshots/flame%20graph/flame%203.png)  
+![Initial Flame Graph 4](./src/assets/screenshots/flame%20graph/flame%204.png)  
+![Initial Flame Graph 5](./src/assets/screenshots/flame%20graph/flame%205.png)  
+![Initial Flame Graph 6](./src/assets/screenshots/flame%20graph/flame%206.png)  
+![Initial Flame Graph 7](./src/assets/screenshots/flame%20graph/flame%207.png)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+_Ranked Charts:_
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Initial Load:**  
+  ![Initial Ranked Chart – Load](./src/assets/screenshots/flame%20graph/initial%20load.png)
+- **Small List:**  
+  ![Small List 1](./src/assets/screenshots/flame%20graph/small%20list%201.png)  
+  ![Small List 2](./src/assets/screenshots/flame%20graph/small%20list%202.png)  
+  ![Small List 3](./src/assets/screenshots/flame%20graph/small%20list%203.png)  
+  ![Small List 4](./src/assets/screenshots/flame%20graph/small%20list%204.png)  
+  ![Small List 5](./src/assets/screenshots/flame%20graph/small%20list%205.png)  
+  ![Small List 6](./src/assets/screenshots/flame%20graph/small%20list%206.png)  
+  ![Small List 7](./src/assets/screenshots/flame%20graph/small%20list%207.png)  
+  ![Small List 8](./src/assets/screenshots/flame%20graph/small%20list%208.png)
+- **Big List:**  
+  ![Big List 1](./src/assets/screenshots/flame%20graph/big%20list%201.png)  
+  ![Big List 2](./src/assets/screenshots/flame%20graph/big%20list%202.png)  
+  ![Big List 3](./src/assets/screenshots/flame%20graph/big%20list%203.png)  
+  ![Big List 4](./src/assets/screenshots/flame%20graph/big%20list%204.png)  
+  ![Big List 5](./src/assets/screenshots/flame%20graph/big%20list%205.png)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## Every update caused a full re-computation and re-render, leading to higher commit times and many interactions.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+### Optimized (With Memoization)
+
+After adding useMemo, useCallback, and React.memo:
+
+- **Commit Duration:**
+  - Most commits now occur in under 10 ms.
+- **Render Duration:**
+  - Component render times are even lower.
+- **Interactions:**
+  - Fewer re-renders occur during filtering, searching, and sorting.
+- **Flame Graph & Ranked Chart:**
+  - The optimized flame graphs show fewer spikes.
+  - Ranked charts confirm that key components render much faster.
+
+**Screenshots (Optimized Version):**
+
+_Optimized Flame Graphs:_
+![Optimized Flame Graph 1](./src/assets/screenshots/optimized/flame%20graph/optimized%20flame%201.png)  
+![Optimized Flame Graph 2](./src/assets/screenshots/optimized/flame%20graph/optimized%20flame%202.png)  
+![Optimized Flame Graph 3](./src/assets/screenshots/optimized/flame%20graph/optimized%20flame%203.png)
+_Optimized Ranked Charts:_
+![Optimized Ranked Chart 1](./src/assets/screenshots/optimized/ranked%20chart/opotimized%20ranked%201.png)  
+![Optimized Ranked Chart 2](./src/assets/screenshots/optimized/ranked%20chart/opotimized%20ranked%202.png)  
+![Optimized Ranked Chart 3](./src/assets/screenshots/optimized/ranked%20chart/opotimized%20ranked%203.png)
+
+### In Conclusion
+
+- **Baseline:** Commit times up to 29.2 ms, frequent re-renders.
+- **Optimized:** Most commits under 10 ms, smoother interactions with fewer re-renders.
