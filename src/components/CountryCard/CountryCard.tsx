@@ -5,17 +5,12 @@ import styles from './CountryCard.module.css';
 interface CountryCardProps {
   country: Country;
   isVisited: boolean;
+  onVisit: (countryName: string) => void;
 }
 
-function CountryCard({ country, isVisited }: CountryCardProps) {
+function CountryCard({ country, isVisited, onVisit }: CountryCardProps) {
   const handleClick = () => {
-    const visited = JSON.parse(
-      localStorage.getItem('visited') || '[]'
-    ) as string[];
-    if (!visited.includes(country.name.common)) {
-      visited.push(country.name.common);
-      localStorage.setItem('visited', JSON.stringify(visited));
-    }
+    onVisit(country.name.common);
   };
 
   return (

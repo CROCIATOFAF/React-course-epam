@@ -15,6 +15,10 @@ const App: React.FC = () => {
   const [sortKey, setSortKey] = useState<'name' | 'population' | ''>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
+  const [visitedCountries, setVisitedCountries] = useState<string[]>(() =>
+    JSON.parse(localStorage.getItem('visited') || '[]')
+  );
+
   useEffect(() => {
     fetch('https://restcountries.com/v3.1/all')
       .then((res) => res.json())
@@ -44,9 +48,16 @@ const App: React.FC = () => {
     []
   );
 
-  const visitedCountries = JSON.parse(
-    localStorage.getItem('visited') || '[]'
-  ) as string[];
+  const handleCountryVisit = useCallback(
+    (countryName: string) => {
+      if (!visitedCountries.includes(countryName)) {
+        const newVisited = [...visitedCountries, countryName];
+        setVisitedCountries(newVisited);
+        localStorage.setItem('visited', JSON.stringify(newVisited));
+      }
+    },
+    [visitedCountries]
+  );
 
   return (
     <div className="App">
@@ -67,6 +78,7 @@ const App: React.FC = () => {
             sortKey={sortKey}
             sortOrder={sortOrder}
             visitedCountries={visitedCountries}
+            onCountryVisit={handleCountryVisit}
           />
         </div>
       </Profiler>

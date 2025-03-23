@@ -10,6 +10,7 @@ interface FilteredCountriesProps {
   sortKey: 'name' | 'population' | '';
   sortOrder: 'asc' | 'desc';
   visitedCountries: string[];
+  onCountryVisit: (countryName: string) => void;
 }
 
 const FilteredCountries: React.FC<FilteredCountriesProps> = ({
@@ -19,6 +20,7 @@ const FilteredCountries: React.FC<FilteredCountriesProps> = ({
   sortKey,
   sortOrder,
   visitedCountries,
+  onCountryVisit,
 }) => {
   const processedCountries = useMemo(() => {
     let filtered = [...countries];
@@ -59,6 +61,7 @@ const FilteredCountries: React.FC<FilteredCountriesProps> = ({
           key={country.name.common}
           country={country}
           isVisited={visitedCountries.includes(country.name.common)}
+          onVisit={onCountryVisit}
         />
       ))}
     </div>
