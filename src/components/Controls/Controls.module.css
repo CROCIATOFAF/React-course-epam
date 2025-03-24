@@ -1,0 +1,41 @@
+.controls__select {
+  padding: 12px;
+  border-radius: 12px;
+  margin-left: 8px;
+  background-color: powderblue;
+  color: black;
+}
+
+.inputName {
+  padding: 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  background-color: powderblue;
+  color: black;
+}
+
+.sortingButtons {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  background-color: powderblue;
+  color: black;
+}
+
+.sortingButtons button {
+  margin-left: 5px;
+}
+
+.controls__region,
+.controls__name {
+  font-size: 18px;
+}
+
+.controls__name {
+  margin-top: 5px;
+}
+
+.controls__name input {
+  padding: 12px;
+}

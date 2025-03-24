@@ -1,0 +1,20 @@
+.countryCard {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin: 1rem 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  justify-items: center;
+  border-radius: 12px;
+  color: #adff2f;
+}
+
+.visited {
+  background-color: #dc143c;
+}
+
+.flag {
+  width: 100px;
+  display: block;
+  margin-bottom: 0.5rem;
+}
